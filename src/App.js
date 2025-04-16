@@ -1,14 +1,7 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignIn from "./Pages/SignIn";
 import Dashboard from "./Pages/Dashboard";
-
-const Home = () => <h2>Home Page</h2>;
 
 function App() {
   // const auth_code = localStorage.getItem("linkedin_auth_code");
