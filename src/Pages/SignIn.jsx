@@ -4,7 +4,7 @@ import axios from "axios";
 import "./SignIn.css";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
-const REDIRECT_URI = "https://sprightly-churros-266666.netlify.app/signin";
+const REDIRECT_URI = "https://resonant-bombolone-4ceb24.netlify.app/signin";
 
 const SignIn = () => {
   const [searchParams] = useSearchParams();
@@ -16,34 +16,35 @@ const SignIn = () => {
     console.log("authorizationCode", authorizationCode);
     console.log("====================================");
 
+    const exchangeCodeForToken = async (code) => {
+      await new Promise((resolve) => setTimeout(resolve, 60000));
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/getLinkedInToken",
+          { code }
+        );
+
+        const accessToken = response.data.accessToken;
+        // const userInfo = response.data.userInfo;
+        console.log("====================================");
+        console.log("response.data", response.data);
+        console.log("====================================");
+
+        localStorage.setItem("linkedin_access_token", accessToken);
+        // localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        localStorage.setItem("user_sub", response.data.sub);
+
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        navigate("/dashboard");
+      } catch (error) {
+        console.error("Error exchanging code for token", error);
+      }
+    };
+
     if (authorizationCode) {
       exchangeCodeForToken(authorizationCode);
     }
-  }, []);
-
-  const exchangeCodeForToken = async (code) => {
-    await new Promise((resolve) => setTimeout(resolve, 60000));
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/getLinkedInToken",
-        { code }
-      );
-
-      const accessToken = response.data.accessToken;
-      // const userInfo = response.data.userInfo;
-      console.log("====================================");
-      console.log("response.data", response.data);
-      console.log("====================================");
-      localStorage.setItem("linkedin_access_token", accessToken);
-      // localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      localStorage.setItem("user_sub", response.data.sub);
-
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      navigate("/dashboard");
-    } catch (error) {
-      console.error("Error exchanging code for token", error);
-    }
-  };
+  }, [navigate, searchParams]);
 
   const handleLinkedInLogin = () => {
     window.location.href = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=profile%20w_member_social%20openid`;
