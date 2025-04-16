@@ -4,7 +4,7 @@ import axios from "axios";
 import "./SignIn.css";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
-const REDIRECT_URI = "https://resonant-bombolone-4ceb24.netlify.app/signin";
+const REDIRECT_URI = "https://linked-in-test-v1.netlify.app/signin";
 
 const SignIn = () => {
   const [searchParams] = useSearchParams();
