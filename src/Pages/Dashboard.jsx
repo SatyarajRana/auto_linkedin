@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Dashboard.css";
@@ -12,10 +12,11 @@ const Dashboard = () => {
   const [createByContext, setCreateByContext] = useState(false);
   const [contextText, setContextText] = useState("");
   const [charLength, setCharLength] = useState(0);
-  const [postsFetched, setPostsFetched] = useState(false);
+  // const [postsFetched, setPostsFetched] = useState(false);
 
   const URL = "https://www.linkedin.com/in/rajstriver/recent-activity/all/";
 
+  const postsFetchedRef = useRef(false);
   useEffect(() => {
     const token = localStorage.getItem("linkedin_access_token");
     if (!token) {
@@ -23,9 +24,9 @@ const Dashboard = () => {
     } else {
       setAccessToken(token);
       fetchUserProfile(token);
-      if (!postsFetched) {
+      if (!postsFetchedRef.current) {
         fetchUserPosts();
-        setPostsFetched(true);
+        postsFetchedRef.current = true;
       }
     }
   }, [navigate]);
