@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/*" element={token ? <Dashboard /> : <SignIn />} />
+        <Route path="/" element={token ? <Dashboard /> : <SignIn />} />
         {/* <Route
           path="/access_token"
           element={token ? <Dashboard /> : <Navigate to="/signin" />}
