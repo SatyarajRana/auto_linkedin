@@ -20,7 +20,7 @@ const SignIn = () => {
       await new Promise((resolve) => setTimeout(resolve, 60000));
       try {
         const response = await axios.post(
-          "http://localhost:8080/getLinkedInToken",
+          "https://api-2jx5jiopma-uc.a.run.app/getLinkedInToken",
           { code }
         );
 
