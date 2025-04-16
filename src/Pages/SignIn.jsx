@@ -21,7 +21,8 @@ const SignIn = () => {
       try {
         const response = await axios.post(
           "https://api-2jx5jiopma-uc.a.run.app/getLinkedInToken",
-          { code }
+          { code },
+          { withCredentials: true }
         );
 
         const accessToken = response.data.accessToken;
