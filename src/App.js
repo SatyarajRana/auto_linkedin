@@ -18,6 +18,7 @@ function App() {
           element={token ? <Dashboard /> : <Navigate to="/signin" />}
         /> */}
         {/* <Route path="*" element={<h2>404 - Page Not Found</h2>} /> */}
+        <Route path="/test" element={<h2>Test</h2>} />
       </Routes>
     </Router>
   );
