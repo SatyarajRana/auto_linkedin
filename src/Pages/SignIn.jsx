@@ -4,7 +4,7 @@ import axios from "axios";
 import "./SignIn.css";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
-const REDIRECT_URI = "http://localhost:3000/signin";
+const REDIRECT_URI = "https://sprightly-churros-266666.netlify.app/signin";
 
 const SignIn = () => {
   const [searchParams] = useSearchParams();
