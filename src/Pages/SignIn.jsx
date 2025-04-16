@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import "./SignIn.css";
+import { useEffect } from "react";
+import "./HomePage.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import "./SignIn.css";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
 const REDIRECT_URI = "https://linked-in-test-v1.netlify.app/signin";
@@ -63,9 +64,6 @@ const SignIn = () => {
 };
 
 export default SignIn;
-// import { useEffect, useState } from "react";
-// import "./HomePage.css";
-// import { useNavigate, useSearchParams } from "react-router-dom";
 
 // const features = [
 //   {

@@ -1,0 +1,114 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-left button {
+  margin-right: 20px;
+  background: none;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.linkedin-btn {
+  background-color: #0072b1;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.linkedin-btn:hover {
+  background-color: #005e93;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto 24px;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 40px 20px;
+}
+
+@media (min-width: 1024px) {
+  .features {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.feature-image img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.feature-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.feature-titles button {
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.active-title {
+  color: #0072b1;
+}
+
+.inactive-title {
+  color: #333;
+}
+
+.inactive-title:hover {
+  color: #0072b1;
+}
+
+.footer {
+  margin-top: auto;
+  background-color: #f0f0f0;
+  text-align: center;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 0.9rem;
+  color: #555;
+}

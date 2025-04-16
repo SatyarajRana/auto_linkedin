@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SignIn from "./Pages/SignIn";
+import HomePage from "./Pages/SignIn";
 import Dashboard from "./Pages/Dashboard";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/*" element={token ? <Dashboard /> : <SignIn />} />
+        <Route path="/*" element={token ? <Dashboard /> : <HomePage />} />
         {/* <Route
           path="/access_token"
           element={token ? <Dashboard /> : <Navigate to="/signin" />}

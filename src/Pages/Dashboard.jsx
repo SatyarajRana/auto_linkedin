@@ -33,9 +33,12 @@ const Dashboard = () => {
 
   const fetchUserProfile = async (token) => {
     try {
-      const response = await axios.get("http://localhost:8080/linkedin/me", {
-        headers: { Authorization: token },
-      });
+      const response = await axios.get(
+        "https://api-2jx5jiopma-uc.a.run.app/linkedin/me",
+        {
+          headers: { Authorization: token },
+        }
+      );
       setUserProfile(response.data.userInfo);
     } catch (error) {
       console.error("Error fetching LinkedIn profile:", error);
@@ -44,7 +47,7 @@ const Dashboard = () => {
 
   const postToLinkedIn = async () => {
     try {
-      await axios.post("http://localhost:8080/linkedin/post", {
+      await axios.post("https://api-2jx5jiopma-uc.a.run.app/linkedin/post", {
         access_token: accessToken,
         text: postText,
         user_id: userProfile.sub,
@@ -60,12 +63,15 @@ const Dashboard = () => {
 
   const fetchUserPosts = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/linkedin/posts", {
-        params: {
-          url: URL,
-          count: 10,
-        },
-      });
+      const response = await axios.get(
+        "https://api-2jx5jiopma-uc.a.run.app/linkedin/posts",
+        {
+          params: {
+            url: URL,
+            count: 10,
+          },
+        }
+      );
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching LinkedIn posts:", error);
@@ -79,7 +85,7 @@ const Dashboard = () => {
     }
     try {
       const response = await axios.get(
-        "http://localhost:8080/linkedin/generate-post",
+        "https://api-2jx5jiopma-uc.a.run.app/linkedin/generate-post",
         {
           params: { context: contextText, char_length: charLength },
         }
