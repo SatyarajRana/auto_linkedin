@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Dashboard.css";
@@ -18,7 +18,7 @@ const Dashboard = () => {
   // const BASE_URL = "http://localhost:8080";
   const BASE_URL = "https://api-2jx5jiopma-uc.a.run.app";
 
-  // const postsFetchedRef = useRef(false);
+  const postsFetchedRef = useRef(false);
   useEffect(() => {
     const token = localStorage.getItem("linkedin_access_token");
     if (!token) {
@@ -26,10 +26,10 @@ const Dashboard = () => {
     } else {
       setAccessToken(token);
       fetchUserProfile(token);
-      // if (!postsFetchedRef.current) {
-      //   fetchUserPosts();
-      //   postsFetchedRef.current = true;
-      // }
+      if (!postsFetchedRef.current) {
+        fetchUserPosts();
+        postsFetchedRef.current = true;
+      }
     }
   }, [navigate]);
 
@@ -60,19 +60,19 @@ const Dashboard = () => {
     }
   };
 
-  // const fetchUserPosts = async () => {
-  //   try {
-  //     const response = await axios.get(`${BASE_URL}/linkedin/posts`, {
-  //       params: {
-  //         url: URL,
-  //         count: 10,
-  //       },
-  //     });
-  //     setPosts(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching LinkedIn posts:", error);
-  //   }
-  // };
+  const fetchUserPosts = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/linkedin/posts`, {
+        params: {
+          url: URL,
+          count: 10,
+        },
+      });
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching LinkedIn posts:", error);
+    }
+  };
 
   const generatePost = async () => {
     if (!contextText) {
