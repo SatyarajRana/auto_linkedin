@@ -4,7 +4,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
+// const BASE_URL = "http://localhost:8080";
+const BASE_URL = "https://api-2jx5jiopma-uc.a.run.app";
 const REDIRECT_URI = "https://linked-in-test-v1.netlify.app/signin";
+// const REDIRECT_URI = "http://localhost:3000/signin";
 
 const SignIn = () => {
   const [searchParams] = useSearchParams();
@@ -20,7 +23,7 @@ const SignIn = () => {
       await new Promise((resolve) => setTimeout(resolve, 60000));
       try {
         const response = await axios.post(
-          "https://api-2jx5jiopma-uc.a.run.app/getLinkedInToken",
+          `${BASE_URL}/getLinkedInToken`,
           { code },
           { withCredentials: true }
         );
