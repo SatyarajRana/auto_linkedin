@@ -55,7 +55,7 @@ const SignIn = () => {
       <div className="signin-box">
         <h2>Welcome! Please sign in</h2>
         <button className="signin-btn" onClick={handleLinkedInLogin}>
-          Sign-in with LinkedIn
+          Sign in with LinkedIn
         </button>
       </div>
     </div>
