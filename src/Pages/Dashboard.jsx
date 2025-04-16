@@ -60,19 +60,19 @@ const Dashboard = () => {
     }
   };
 
-  const fetchUserPosts = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/linkedin/posts`, {
-        params: {
-          url: URL,
-          count: 10,
-        },
-      });
-      setPosts(response.data);
-    } catch (error) {
-      console.error("Error fetching LinkedIn posts:", error);
-    }
-  };
+  // const fetchUserPosts = async () => {
+  //   try {
+  //     const response = await axios.get(`${BASE_URL}/linkedin/posts`, {
+  //       params: {
+  //         url: URL,
+  //         count: 10,
+  //       },
+  //     });
+  //     setPosts(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching LinkedIn posts:", error);
+  //   }
+  // };
 
   const generatePost = async () => {
     if (!contextText) {
