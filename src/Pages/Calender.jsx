@@ -77,7 +77,10 @@ export default function ContentCalendar() {
               <tr key={i}>
                 <td>Week {i + 1}</td>
                 <td>
-                  [userProfile.onboarding_answers[i] || `[Theme ${i + 1}]`]
+                  $
+                  {userProfile
+                    ? userProfile.onboarding_answers[i]
+                    : "Loading..."}
                 </td>
                 <td>{pillars[i] || `[Pillar ${i + 1}]`}</td>
                 <td>{goal}</td>
