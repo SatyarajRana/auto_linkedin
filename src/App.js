@@ -28,7 +28,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/calender" replace />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route
           path="/calender"
