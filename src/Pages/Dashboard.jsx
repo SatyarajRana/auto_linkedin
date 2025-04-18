@@ -5,39 +5,41 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [accessToken, setAccessToken] = useState("");
+  // const [accessToken, setAccessToken] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [postText, setPostText] = useState("");
   const [posts, setPosts] = useState([]);
   const [createByContext, setCreateByContext] = useState(false);
   const [contextText, setContextText] = useState("");
   const [charLength, setCharLength] = useState(0);
+  const [token, setToken] = useState(localStorage.getItem("session_token"));
   // const [postsFetched, setPostsFetched] = useState(false);
 
   const URL = "https://www.linkedin.com/in/rajstriver/recent-activity/all/";
-  // const BASE_URL = "http://localhost:8080";
+  // const BASE_URL =
+  // "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
   const BASE_URL = "https://api-2jx5jiopma-uc.a.run.app";
 
-  const postsFetchedRef = useRef(false);
+  // const postsFetchedRef = useRef(false);
   useEffect(() => {
-    const token = localStorage.getItem("linkedin_access_token");
-    if (!token) {
-      navigate("/signin");
-    } else {
-      setAccessToken(token);
-      fetchUserProfile(token);
-      if (!postsFetchedRef.current) {
-        fetchUserPosts();
-        postsFetchedRef.current = true;
+    if (!userProfile) {
+      // const token = localStorage.getItem("session_token");
+      if (!token) {
+        navigate("/signin");
       }
+      if (localStorage.getItem("new_user") === "true") {
+        navigate("/onboarding");
+      }
+      fetchUserProfile(token);
     }
-  }, [navigate]);
+  }, [userProfile, navigate]);
 
   const fetchUserProfile = async (token) => {
     try {
       const response = await axios.get(`${BASE_URL}/linkedin/me`, {
         headers: { Authorization: token },
       });
+
       setUserProfile(response.data.userInfo);
     } catch (error) {
       console.error("Error fetching LinkedIn profile:", error);
@@ -46,11 +48,14 @@ const Dashboard = () => {
 
   const postToLinkedIn = async () => {
     try {
-      await axios.post(`${BASE_URL}/linkedin/post`, {
-        access_token: accessToken,
-        text: postText,
-        user_id: userProfile.sub,
-      });
+      await axios.post(
+        `${BASE_URL}/linkedin/post`,
+        {
+          access_token: userProfile.accessToken,
+          text: postText,
+        },
+        { headers: { Authorization: token } }
+      );
       setPostText("");
     } catch (error) {
       console.error(
@@ -60,19 +65,19 @@ const Dashboard = () => {
     }
   };
 
-  const fetchUserPosts = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/linkedin/posts`, {
-        params: {
-          url: URL,
-          count: 10,
-        },
-      });
-      setPosts(response.data);
-    } catch (error) {
-      console.error("Error fetching LinkedIn posts:", error);
-    }
-  };
+  // const fetchUserPosts = async () => {
+  //   try {
+  //     const response = await axios.get(`${BASE_URL}/linkedin/posts`, {
+  //       params: {
+  //         url: URL,
+  //         count: 10,
+  //       },
+  //     });
+  //     setPosts(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching LinkedIn posts:", error);
+  //   }
+  // };
 
   const generatePost = async () => {
     if (!contextText) {
@@ -98,7 +103,7 @@ const Dashboard = () => {
       <div className="profile">
         {userProfile ? (
           <p>
-            <strong>Name:</strong> {userProfile.given_name}
+            <strong>Name:</strong> {userProfile.name}
           </p>
         ) : (
           <p>Loading profile...</p>

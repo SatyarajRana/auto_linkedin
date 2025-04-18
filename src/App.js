@@ -1,27 +1,95 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import HomePage from "./Pages/SignIn";
 import Dashboard from "./Pages/Dashboard";
+import Onboarding from "./Pages/OnboardingPage";
+import axios from "axios";
+
+// const BASE_URL = "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
+const BASE_URL = "https://api-2jx5jiopma-uc.a.run.app";
 
 function App() {
-  // const auth_code = localStorage.getItem("linkedin_auth_code");
-  const token = localStorage.getItem("linkedin_access_token");
-
   return (
     <Router>
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-
-        <Route path="/*" element={token ? <Dashboard /> : <HomePage />} />
+        {/* <Route path="/signin" element={<HomePage />} />
         {/* <Route
           path="/access_token"
           element={token ? <Dashboard /> : <Navigate to="/signin" />}
         /> */}
         {/* <Route path="*" element={<h2>404 - Page Not Found</h2>} /> */}
-        <Route path="/test" element={<h2>Test</h2>} />
+        <Route path="/signin" element={<HomePage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/onboarding" element={<Onboarding />} />
       </Routes>
     </Router>
   );
 }
+
+const authenticateToken = async (token) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/auth/validate`, {
+      headers: { Authorization: token },
+    });
+
+    if (response.data.valid) {
+      // store response.data.user_sub in session storage
+      sessionStorage.setItem("user_sub", response.data.user_sub);
+    }
+    return response.data.valid;
+  } catch (error) {
+    console.error("Error fetching LinkedIn profile:", error);
+  }
+};
+
+const ProtectedRoute = ({ children }) => {
+  const [isValidating, setIsValidating] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const validateToken = async () => {
+      const sessionToken = localStorage.getItem("session_token");
+
+      if (!sessionToken) {
+        console.log("No session token found, redirecting to sign-in page");
+
+        navigate("/signin", { replace: true });
+        return;
+      }
+
+      try {
+        const isTokenValid = await authenticateToken(sessionToken);
+        if (!isTokenValid) {
+          localStorage.removeItem("session_token");
+          navigate("/signin", { replace: true });
+        }
+      } catch (error) {
+        localStorage.removeItem("session_token");
+        navigate("/signin", { replace: true });
+      } finally {
+        setIsValidating(false);
+      }
+    };
+
+    validateToken();
+  }, [navigate]);
+
+  if (isValidating) return <div>Loading...</div>;
+  return children;
+};
 
 export default App;

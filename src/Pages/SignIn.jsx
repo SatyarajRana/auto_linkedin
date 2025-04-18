@@ -4,8 +4,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
-// const BASE_URL = "http://localhost:8080";
+
+// const BASE_URL = "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
 const BASE_URL = "https://api-2jx5jiopma-uc.a.run.app";
+
 const REDIRECT_URI = "https://linked-in-test-v1.netlify.app/signin";
 // const REDIRECT_URI = "http://localhost:3000/signin";
 
@@ -13,33 +15,53 @@ const SignIn = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  const authenticateToken = async (token) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/auth/validate`, {
+        headers: { Authorization: token },
+      });
+      if (response.data.valid) {
+        navigate("/dashboard");
+      } else {
+        localStorage.removeItem("session_token");
+        navigate("/signin");
+      }
+    } catch (error) {
+      console.error("Error fetching LinkedIn profile:", error);
+    }
+  };
+
   useEffect(() => {
+    const token = localStorage.getItem("session_token");
+
+    if (token) {
+      authenticateToken(token);
+    }
+
     const authorizationCode = searchParams.get("code");
-    console.log("====================================");
-    console.log("authorizationCode", authorizationCode);
-    console.log("====================================");
 
     const exchangeCodeForToken = async (code) => {
-      await new Promise((resolve) => setTimeout(resolve, 60000));
+      // await new Promise((resolve) => setTimeout(resolve, 60000));
       try {
         const response = await axios.post(
           `${BASE_URL}/getLinkedInToken`,
-          { code },
-          { withCredentials: true }
+          { code }
+          // { withCredentials: true }
         );
 
-        const accessToken = response.data.accessToken;
-        // const userInfo = response.data.userInfo;
-        console.log("====================================");
-        console.log("response.data", response.data);
-        console.log("====================================");
+        localStorage.setItem("session_token", response.data.token);
+        // localStorage.setItem("user_sub", response.data.sub);
+        const user_exists = response.data.user_exists;
+        console.log("USER EXISTS", user_exists);
 
-        localStorage.setItem("linkedin_access_token", accessToken);
-        // localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        localStorage.setItem("user_sub", response.data.sub);
+        if (!user_exists) {
+          console.log("User does not exist");
 
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        navigate("/dashboard");
+          localStorage.setItem("new_user", true);
+          navigate("/onboarding");
+        } else {
+          navigate("/dashboard");
+        }
       } catch (error) {
         console.error("Error exchanging code for token", error);
       }
