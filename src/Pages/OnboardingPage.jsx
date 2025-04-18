@@ -1,21 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Onboarding.css";
 
 import axios from "axios";
 
+import { motion, AnimatePresence } from "framer-motion"; // install this if not added
+
+const fadeSlide = {
+  initial: { opacity: 0, x: 30 },
+  animate: { opacity: 1, x: 0, transition: { duration: 0.4 } },
+  exit: { opacity: 0, x: -30, transition: { duration: 0.3 } },
+};
+
 const questions = [
-  "What's your current job title?",
-  "What industry do you work in?",
-  "What are your career goals?",
-  "What kind of content do you want to post on LinkedIn?",
-  "Who is your target audience on LinkedIn?",
+  "What problems do I solve?",
+  "What processes do I use?",
+  "What perspectives do I have?",
+  "What proof can I share?",
+  "What personal stories connect to my work?",
 ];
 
 export default function Onboarding() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(""));
   const navigate = useNavigate();
+  const textareaRef = useRef(null);
 
   //   const BASE_URL =
   // "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
@@ -24,11 +33,19 @@ export default function Onboarding() {
   useEffect(() => {
     const new_user = localStorage.getItem("new_user");
     console.log("new_user", new_user);
-
     if (!new_user || new_user !== "true") {
       navigate("/signin");
     }
-  }, [navigate]);
+    console.log("Step", step);
+
+    setTimeout(() => {
+      if (textareaRef.current) {
+        console.log("Here");
+
+        textareaRef.current.focus();
+      }
+    }, 500);
+  }, [navigate, step]);
   const handleNext = () => {
     if (step < questions.length - 1) {
       setStep(step + 1);
@@ -67,30 +84,50 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="onboarding-container">
-      <div className="onboarding-card">
-        <h2 className="onboarding-step">
-          Step {step + 1} of {questions.length}
-        </h2>
-        <p className="onboarding-question">{questions[step]}</p>
-        <textarea
-          className="onboarding-textarea"
-          value={answers[step]}
-          onChange={handleChange}
-          placeholder="Type your answer..."
-        />
-        <div className="onboarding-buttons">
-          <button
-            onClick={handleBack}
-            disabled={step === 0}
-            className="btn back-btn"
+    <div className="onboarding-fullscreen">
+      <h1 className="onboarding-header">
+        Identify your 5 core content pillars by answering <br /> Question{" "}
+        {step + 1} of {questions.length}
+      </h1>
+      <div className="onboarding-content">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            variants={fadeSlide}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="onboarding-step-container"
           >
-            Back
-          </button>
-          <button onClick={handleNext} className="btn next-btn">
-            {step === questions.length - 1 ? "Finish" : "Next"}
-          </button>
-        </div>
+            <p className="onboarding-question">{questions[step]}</p>
+            <textarea
+              className="onboarding-textarea"
+              value={answers[step]}
+              onChange={handleChange}
+              ref={textareaRef}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleNext();
+                }
+              }}
+              placeholder="Type your answer..."
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div className="onboarding-footer">
+        <button
+          onClick={handleBack}
+          disabled={step === 0}
+          className="btn back-btn"
+        >
+          Back
+        </button>
+        <button onClick={handleNext} className="btn next-btn">
+          {step === questions.length - 1 ? "Finish" : "Next"}
+        </button>
       </div>
     </div>
   );
