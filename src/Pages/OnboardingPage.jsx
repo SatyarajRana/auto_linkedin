@@ -28,7 +28,7 @@ export default function Onboarding() {
     if (!new_user || new_user !== "true") {
       navigate("/signin");
     }
-  }, []);
+  }, [navigate]);
   const handleNext = () => {
     if (step < questions.length - 1) {
       setStep(step + 1);

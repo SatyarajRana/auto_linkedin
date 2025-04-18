@@ -15,24 +15,24 @@ const SignIn = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const authenticateToken = async (token) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/auth/validate`, {
-        headers: { Authorization: token },
-      });
-      if (response.data.valid) {
-        navigate("/dashboard");
-      } else {
-        localStorage.removeItem("session_token");
-        navigate("/signin");
-      }
-    } catch (error) {
-      console.error("Error fetching LinkedIn profile:", error);
-    }
-  };
-
   useEffect(() => {
     const token = localStorage.getItem("session_token");
+
+    const authenticateToken = async (token) => {
+      try {
+        const response = await axios.get(`${BASE_URL}/auth/validate`, {
+          headers: { Authorization: token },
+        });
+        if (response.data.valid) {
+          navigate("/dashboard");
+        } else {
+          localStorage.removeItem("session_token");
+          navigate("/signin");
+        }
+      } catch (error) {
+        console.error("Error fetching LinkedIn profile:", error);
+      }
+    };
 
     if (token) {
       authenticateToken(token);
