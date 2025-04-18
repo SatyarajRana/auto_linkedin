@@ -18,12 +18,6 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* <Route path="/signin" element={<HomePage />} />
-        {/* <Route
-          path="/access_token"
-          element={token ? <Dashboard /> : <Navigate to="/signin" />}
-        /> */}
-        {/* <Route path="*" element={<h2>404 - Page Not Found</h2>} /> */}
         <Route path="/signin" element={<HomePage />} />
         <Route
           path="/dashboard"
