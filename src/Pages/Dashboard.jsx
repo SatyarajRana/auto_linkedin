@@ -8,14 +8,14 @@ const Dashboard = () => {
   // const [accessToken, setAccessToken] = useState("");
   const [userProfile, setUserProfile] = useState(null);
   const [postText, setPostText] = useState("");
-  const [posts, setPosts] = useState([]);
+  const [posts] = useState([]);
   const [createByContext, setCreateByContext] = useState(false);
   const [contextText, setContextText] = useState("");
   const [charLength, setCharLength] = useState(0);
-  const [token, setToken] = useState(localStorage.getItem("session_token"));
+  const [token] = useState(localStorage.getItem("session_token"));
   // const [postsFetched, setPostsFetched] = useState(false);
 
-  const URL = "https://www.linkedin.com/in/rajstriver/recent-activity/all/";
+  // const URL = "https://www.linkedin.com/in/rajstriver/recent-activity/all/";
   // const BASE_URL =
   // "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
   const BASE_URL = "https://api-2jx5jiopma-uc.a.run.app";
@@ -32,7 +32,7 @@ const Dashboard = () => {
       }
       fetchUserProfile(token);
     }
-  }, [userProfile, navigate]);
+  }, [userProfile, navigate, token]);
 
   const fetchUserProfile = async (token) => {
     try {
