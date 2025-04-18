@@ -9,6 +9,7 @@ import {
 import HomePage from "./Pages/SignIn";
 import Dashboard from "./Pages/Dashboard";
 import Onboarding from "./Pages/OnboardingPage";
+import Calender from "./Pages/Calender";
 import axios from "axios";
 
 // const BASE_URL = "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
@@ -29,6 +30,15 @@ function App() {
         />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
         <Route path="/onboarding" element={<Onboarding />} />
+        <Route
+          path="/calender"
+          element={
+            <ProtectedRoute>
+              <Calender />
+            </ProtectedRoute>
+          }
+        />
+        {/* <Route path="/calender" element={<Calender />} /> */}
       </Routes>
     </Router>
   );

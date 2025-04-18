@@ -1,0 +1,73 @@
+.calendar-container {
+  padding: 2rem;
+  background-color: #1e1e1e;
+  min-height: 100vh;
+  color: #ffffff;
+  font-family: "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #8c86aa;
+}
+
+.calendar-table {
+  width: 50%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.calendar-table th,
+.calendar-table td {
+  padding: 0.85rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid #3f3f3f;
+}
+
+.calendar-table th {
+  background-color: #3b3b3b;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+.calendar-table td {
+  color: #d1d5db;
+  font-size: 0.95rem;
+}
+
+.calendar-table tr:last-child td {
+  border-bottom: none;
+}
+
+.confirm-btn {
+  background-color: #4b5563;
+  color: #ffffff;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.confirm-btn:hover {
+  background-color: #6b7280;
+  transform: scale(1.05);
+}
+
+.confirm-btn.confirmed {
+  background-color: #10b981;
+  font-size: 1.1rem;
+  cursor: default;
+}

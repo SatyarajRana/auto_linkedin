@@ -23,7 +23,7 @@ const features = [
   },
   {
     title: "Generate from context",
-    image: "/images/schedule.png",
+    image: "/images/autogenerate_context.png",
     text: "Generate posts from context",
   },
 ];
@@ -42,7 +42,7 @@ export default function HomePage() {
           headers: { Authorization: token },
         });
         if (response.data.valid) {
-          navigate("/dashboard");
+          navigate("/calender");
         } else {
           localStorage.removeItem("session_token");
           navigate("/signin");
@@ -78,7 +78,7 @@ export default function HomePage() {
           localStorage.setItem("new_user", true);
           navigate("/onboarding");
         } else {
-          navigate("/dashboard");
+          navigate("/calender");
         }
       } catch (error) {
         console.error("Error exchanging code for token", error);

@@ -79,7 +79,7 @@ export default function Onboarding() {
       }
     );
     localStorage.removeItem("new_user");
-    navigate("/dashboard");
+    navigate("/calender");
     // Send to backend or store in context
   };
 
