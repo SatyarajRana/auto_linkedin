@@ -32,6 +32,7 @@ export default function ContentCalendar() {
       const response = await axios.get(`${BASE_URL}/linkedin/me`, {
         headers: { Authorization: token },
       });
+      console.log("User Profile:", response.data.userInfo);
 
       setUserProfile(response.data.userInfo);
     } catch (error) {
@@ -75,7 +76,9 @@ export default function ContentCalendar() {
             (goal, i) => (
               <tr key={i}>
                 <td>Week {i + 1}</td>
-                <td>[Theme]</td>
+                <td>
+                  [userProfile.onboarding_answers[i] || `[Theme ${i + 1}]`]
+                </td>
                 <td>{pillars[i] || `[Pillar ${i + 1}]`}</td>
                 <td>{goal}</td>
               </tr>
