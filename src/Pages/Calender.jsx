@@ -77,7 +77,6 @@ export default function ContentCalendar() {
               <tr key={i}>
                 <td>Week {i + 1}</td>
                 <td>
-                  $
                   {userProfile
                     ? userProfile.onboarding_answers[i]
                     : "Loading..."}
