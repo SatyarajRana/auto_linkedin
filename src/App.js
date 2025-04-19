@@ -12,7 +12,7 @@ import Onboarding from "./Pages/OnboardingPage";
 import Calender from "./Pages/Calender";
 import axios from "axios";
 
-// const BASE_URL = "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
+// const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
 const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
 
 function App() {

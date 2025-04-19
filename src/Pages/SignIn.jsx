@@ -1,36 +1,17 @@
 import "./SignIn.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
 
-// const BASE_URL = "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
+// const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
 const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
 
 const REDIRECT_URI = "https://linked-in-test-v1.netlify.app/signin";
 // const REDIRECT_URI = "http://localhost:3000/signin";
 
-const features = [
-  {
-    title: "Autogenerate Posts with AI",
-    image: "/images/autogenerate_posts.png",
-    text: "Effortlessly create posts with our autogenerate feature",
-  },
-  {
-    title: "Customise and Schedule posts",
-    image: "/images/schedule_posts.png",
-    text: "Schedule future posts",
-  },
-  {
-    title: "Generate from context",
-    image: "/images/autogenerate_context.png",
-    text: "Generate posts from context",
-  },
-];
-
 export default function HomePage() {
-  const [activeFeature, setActiveFeature] = useState(0);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -96,63 +77,36 @@ export default function HomePage() {
   };
 
   return (
-    <div className="signin-container">
-      {/* Navbar */}
-      <nav className="navbar">
-        <div className="nav-left">
-          <button>Home</button>
-          <button>Pricing</button>
-          <button>About</button>
-        </div>
-        <button className="signin-btn">Sign in with LinkedIn</button>
-      </nav>
-
-      {/* Hero Section */}
-      <div className="hero">
-        <h1>Grow your Linkedin presence with ease</h1>
-        <p>
-          Our ghostwriting app simplifies the process of creating and posting
-          engaging content on LinkedIn. Sign in with LinkedIn to get started!
-        </p>
-        <button className="signin-btn" onClick={handleLinkedInLogin}>
-          Sign in with LinkedIn
-        </button>
-      </div>
-
-      {/* Feature Section */}
-      <section className="features">
-        <div className="image-container">
-          <div className="feature-image">
-            <img
-              src={features[activeFeature].image}
-              alt={features[activeFeature].title}
-            />
+    <div className="signup-container">
+      <div className="form-section">
+        <div className="logo">🦖 Zilla</div>
+        <div className="form-wrapper1">
+          <div className="arrow-container">
+            <img src="/images/arrow.png" alt="" className="arrow-image" />
+          </div>
+          <div className="form-content">
+            <div className="form-header">
+              <p className="subtitle">
+                {" "}
+                <h1>Welcome to Zilla</h1>Simplify the process of creating and
+                posting engaging content on LinkedIn
+              </p>
+              <button className="signup-button" onClick={handleLinkedInLogin}>
+                Sign in with Linkedin
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="feature-titles-container">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              onClick={() => setActiveFeature(index)}
-              className={
-                activeFeature === index ? "active-title" : "inactive-title"
-              }
-            >
-              <h1>{feature.title}</h1>
-
-              <p>{feature.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>Contact Us</p>
-        <p>About Us</p>
-        <p>Privacy Policy</p>
-      </footer>
+      <div className="graphic-section">
+        <h2>Grow your Linkedin presence with ease!</h2>
+        <img
+          src="/images/like3.png"
+          alt="Email Graphic"
+          className="illustration"
+        />
+      </div>
     </div>
   );
 }

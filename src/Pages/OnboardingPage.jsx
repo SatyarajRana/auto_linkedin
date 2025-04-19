@@ -26,8 +26,7 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const textareaRef = useRef(null);
 
-  //   const BASE_URL =
-  // "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
+  // const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
   const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
 
   useEffect(() => {
@@ -36,7 +35,6 @@ export default function Onboarding() {
     if (!new_user || new_user !== "true") {
       navigate("/signin");
     }
-    console.log("Step", step);
 
     setTimeout(() => {
       if (textareaRef.current) {
@@ -79,55 +77,73 @@ export default function Onboarding() {
       }
     );
     localStorage.removeItem("new_user");
+    // setTimeout(() => {
     navigate("/calender");
+    // }, 30000);
     // Send to backend or store in context
   };
 
   return (
-    <div className="onboarding-fullscreen">
-      <h1 className="onboarding-header">
-        Identify your 5 core content pillars by answering <br /> Question{" "}
-        {step + 1} of {questions.length}
-      </h1>
-      <div className="onboarding-content">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            variants={fadeSlide}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="onboarding-step-container"
-          >
-            <p className="onboarding-question">{questions[step]}</p>
-            <textarea
-              className="onboarding-textarea"
-              value={answers[step]}
-              onChange={handleChange}
-              ref={textareaRef}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleNext();
-                }
-              }}
-              placeholder="Type your answer..."
-            />
-          </motion.div>
-        </AnimatePresence>
+    <div className="signup-container">
+      <div className="form-section">
+        <div className="logo">🦖 Zilla</div>
+        <div className="form-wrapper">
+          <div className="onboarding-header">
+            <h1>
+              {" "}
+              Identify your 5 core content pillars by answering: <br />
+              <br />
+              Q. {step + 1} of {questions.length}
+            </h1>
+          </div>
+          <div className="onboarding-content">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={step}
+                variants={fadeSlide}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="onboarding-step-container"
+              >
+                <p className="onboarding-question">{questions[step]}</p>
+                <textarea
+                  className="onboarding-textarea"
+                  value={answers[step]}
+                  onChange={handleChange}
+                  ref={textareaRef}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleNext();
+                    }
+                  }}
+                  placeholder="Type your answer..."
+                />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <div className="onboarding-footer">
+            <button
+              onClick={handleBack}
+              disabled={step === 0}
+              className="btn back-btn"
+            >
+              Back
+            </button>
+            <button onClick={handleNext} className="btn next-btn">
+              {step === questions.length - 1 ? "Finish" : "Next"}
+            </button>
+          </div>
+        </div>
       </div>
-
-      <div className="onboarding-footer">
-        <button
-          onClick={handleBack}
-          disabled={step === 0}
-          className="btn back-btn"
-        >
-          Back
-        </button>
-        <button onClick={handleNext} className="btn next-btn">
-          {step === questions.length - 1 ? "Finish" : "Next"}
-        </button>
+      <div className="graphic-section">
+        <h2>Grow your Linkedin presence with ease!</h2>
+        <img
+          src="/images/like3.png" // Replace with your own vector image or animation
+          alt="Email Graphic"
+          className="illustration"
+        />
       </div>
     </div>
   );
