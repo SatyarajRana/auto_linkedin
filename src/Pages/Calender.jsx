@@ -37,9 +37,24 @@ export default function ContentCalendar() {
         headers: { Authorization: token },
       });
       console.log("User Profile:", response.data.userInfo);
+      const onboardingAnswers = response.data.userInfo.onboarding_answers;
 
       setUserProfile(response.data.userInfo);
-      setTopics(response.data.userInfo.topicIdeas);
+      if (response.data.userInfo.topicIdeas.length < 3) {
+        console.log("Setting topics");
+
+        setTopics(
+          await axios.post(
+            `${BASE_URL}/onboarding`,
+            { answers: onboardingAnswers },
+            { headers: { Authorization: token } }
+          )
+        );
+        // refresh the page
+        window.location.reload();
+      } else {
+        setTopics(response.data.userInfo.topicIdeas);
+      }
     } catch (error) {
       console.error("Error fetching LinkedIn profile:", error);
     }
