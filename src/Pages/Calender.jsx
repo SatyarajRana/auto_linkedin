@@ -17,6 +17,7 @@ export default function ContentCalendar() {
     "Topic Idea 2",
     "Topic Idea 3",
   ]);
+  const [activeView, setActiveView] = useState("monthly");
 
   useEffect(() => {
     if (!userProfile) {
@@ -88,86 +89,113 @@ export default function ContentCalendar() {
 
   return (
     <div className="calendar-container">
-      <div className="monthly-view-container">
-        <h2>Monthly View</h2>
-        <table className="calendar-table">
-          <thead>
-            <tr>
-              <th>Week</th>
-              <th>Theme</th>
-              <th>Content Pillar</th>
-              <th>Primary Goal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {["Awareness", "Engagement", "Authority", "Connection"].map(
-              (goal, i) => (
-                <tr key={i}>
-                  <td>Week {i + 1}</td>
-                  <td>{themes[i] || `[Theme ${i + 1}]`}</td>
-                  <td>{pillars[i] || `[Pillar ${i + 1}]`}</td>
-                  <td>{goal}</td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
+      <div className="logo">🦖 Zilla</div>
+      <div className="calendar-toggle">
+        <button
+          className={`toggle-btn ${activeView === "monthly" ? "active" : ""}`}
+          onClick={() => setActiveView("monthly")}
+        >
+          Monthly View
+        </button>
+        <button
+          className={`toggle-btn ${activeView === "weekly" ? "active" : ""}`}
+          onClick={() => setActiveView("weekly")}
+        >
+          Weekly Breakdown
+        </button>
       </div>
-
-      <div className="weekly-view-container">
-        <h2>Weekly Breakdown</h2>
-        <table className="calendar-table">
-          <thead>
-            <tr>
-              <th>Day</th>
-              <th>Content Type</th>
-              <th>Template</th>
-              <th>Topic Ideas</th>
-              <th>Post Time</th>
-              <th>Confirmation</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              [
-                "Monday",
-                "Teaching",
-                "Process Reveal",
-                `${topics[0]}`,
-                "9:00am",
-              ],
-              [
-                "Wednesday",
-                "Problem/Solution",
-                "Myth Buster",
-                `${topics[1]}`,
-                "11:00am",
-              ],
-              [
-                "Friday",
-                "Success Story",
-                "Before/After",
-                `${topics[2]}`,
-                "3:00pm",
-              ],
-            ].map((row, i) => (
-              <tr key={i}>
-                {row.map((cell, j) => (
-                  <td key={j}>{cell}</td>
-                ))}
-                <td>
-                  <button
-                    className={`confirm-btn ${confirmed[i] ? "confirmed" : ""}`}
-                    onClick={() => toggleConfirmation(i)}
-                  >
-                    {confirmed[i] ? "✅" : "Confirm"}
-                  </button>
-                </td>
+      {activeView === "monthly" && (
+        <div className="monthly-view-container">
+          {/* <h2>Monthly View</h2> */}
+          <table className="calendar-table">
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Theme</th>
+                <th>Content Pillar</th>
+                <th>Primary Goal</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {["Awareness", "Engagement", "Authority", "Connection"].map(
+                (goal, i) => (
+                  <tr key={i}>
+                    <td>Week {i + 1}</td>
+                    <td>{themes[i] || `[Theme ${i + 1}]`}</td>
+                    <td>
+                      {" "}
+                      <span
+                        className={`badge badge-${pillars[i].toLowerCase()}`}
+                      >
+                        {pillars[i]}
+                      </span>
+                    </td>
+                    <td>{goal}</td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {activeView === "weekly" && (
+        <div className="weekly-view-container">
+          {/* <h2>Weekly Breakdown</h2> */}
+          <table className="calendar-table">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Content Type</th>
+                <th>Template</th>
+                <th>Topic Ideas</th>
+                <th>Post Time</th>
+                <th>Confirmation</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                [
+                  "Monday",
+                  "Teaching",
+                  "Process Reveal",
+                  `${topics[0]}`,
+                  "9:00am",
+                ],
+                [
+                  "Wednesday",
+                  "Problem/Solution",
+                  "Myth Buster",
+                  `${topics[1]}`,
+                  "11:00am",
+                ],
+                [
+                  "Friday",
+                  "Success Story",
+                  "Before/After",
+                  `${topics[2]}`,
+                  "3:00pm",
+                ],
+              ].map((row, i) => (
+                <tr key={i}>
+                  {row.map((cell, j) => (
+                    <td key={j}>{cell}</td>
+                  ))}
+                  <td>
+                    <button
+                      className={`confirm-btn ${
+                        confirmed[i] ? "confirmed" : ""
+                      }`}
+                      onClick={() => toggleConfirmation(i)}
+                    >
+                      {confirmed[i] ? "✅" : "Confirm"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
