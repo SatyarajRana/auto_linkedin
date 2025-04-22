@@ -74,10 +74,11 @@ export default function ContentCalendar() {
           ];
           setPosts(userPosts); // Set the posts array based on the user tasks
           const scheduledStatus = [
-            userInfo.tasks[0]?.content !== "",
-            userInfo.tasks[1]?.content !== "",
-            userInfo.tasks[2]?.content !== "",
+            !!userInfo.tasks[0]?.content,
+            !!userInfo.tasks[1]?.content,
+            !!userInfo.tasks[2]?.content,
           ];
+
           setIsScheduled(scheduledStatus); // Set the scheduled status based on user tasks
         }
 
