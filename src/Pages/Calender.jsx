@@ -9,7 +9,7 @@ const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
 export default function ContentCalendar() {
   const navigate = useNavigate();
   const [pillars] = useState(["Problems", "Processes", "Perspective", "Proof"]);
-  const [confirmed, setConfirmed] = useState([false, false, false]);
+  // const [confirmed, setConfirmed] = useState([false, false, false]);
   // const [token] = useState(localStorage.getItem("session_token"));
   const [userProfile, setUserProfile] = useState(null);
   const [topics, setTopics] = useState([
@@ -18,6 +18,10 @@ export default function ContentCalendar() {
     "Topic Idea 3",
   ]);
   const [activeView, setActiveView] = useState("monthly");
+
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [posts, setPosts] = useState(["", "", ""]);
+  const [isScheduled, setIsScheduled] = useState([false, false, false]);
 
   useEffect(() => {
     if (!userProfile) {
@@ -53,26 +57,44 @@ export default function ContentCalendar() {
         headers: { Authorization: token },
       });
       console.log("User Profile:", response.data.userInfo);
-      const onboardingAnswers = response.data.userInfo.onboarding_answers;
-      if (response.data.userInfo.onboarding_completed === false) {
+
+      const userInfo = response.data.userInfo;
+      if (userInfo.onboarding_completed === false) {
         console.log("Onboarding not completed");
         navigate("/onboarding");
       } else {
-        setUserProfile(response.data.userInfo);
-        if (response.data.userInfo.topicIdeas.length < 3) {
-          console.log("Setting topics");
+        setUserProfile(userInfo);
 
+        //Check if user has tasks
+        if (userInfo.tasks) {
+          const userPosts = [
+            userInfo.tasks[0]?.content || "",
+            userInfo.tasks[1]?.content || "",
+            userInfo.tasks[2]?.content || "",
+          ];
+          setPosts(userPosts); // Set the posts array based on the user tasks
+          const scheduledStatus = [
+            userInfo.tasks[0]?.content !== "",
+            userInfo.tasks[1]?.content !== "",
+            userInfo.tasks[2]?.content !== "",
+          ];
+          setIsScheduled(scheduledStatus); // Set the scheduled status based on user tasks
+        }
+
+        //Set topics if necessary
+        if (userInfo.topicIdeas.length < 3) {
+          console.log("Setting topics");
           setTopics(
             await axios.post(
               `${BASE_URL}/onboarding`,
-              { answers: onboardingAnswers },
+              { answers: userInfo.onboarding_answers },
               { headers: { Authorization: token } }
             )
           );
-          // refresh the page
+          // Refresh the page
           window.location.reload();
         } else {
-          setTopics(response.data.userInfo.topicIdeas);
+          setTopics(userInfo.topicIdeas);
         }
       }
     } catch (error) {
@@ -96,18 +118,66 @@ export default function ContentCalendar() {
   //     }
   //   };
 
-  const toggleConfirmation = (index) => {
-    setConfirmed((prev) => {
-      const updated = [...prev];
-      updated[index] = !updated[index];
-      return updated;
-    });
-  };
+  // const toggleConfirmation = (index) => {
+  //   setConfirmed((prev) => {
+  //     const updated = [...prev];
+  //     updated[index] = !updated[index];
+  //     return updated;
+  //   });
+  // };
 
   // const handleEditAnswers = () => {
   //   localStorage.setItem("onboarding", "true");
   //   navigate("/onboarding");
   // };
+  function getNextWeekdayTime(targetDay, targetHour) {
+    const now = new Date();
+    const currentDay = now.getDay(); // 0 (Sun) - 6 (Sat)
+    const currentHour = now.getHours();
+
+    let date = new Date(now);
+
+    if (currentDay === targetDay && currentHour < targetHour) {
+      // It's the target day and still before the target hour → use today
+      date.setHours(targetHour, 0, 0, 0);
+    } else {
+      // Otherwise go to next week's target day
+      const daysToAdd = (7 + targetDay - currentDay) % 7 || 7;
+      date.setDate(now.getDate() + daysToAdd);
+      date.setHours(targetHour, 0, 0, 0);
+    }
+
+    return date.toISOString(); // Send this to the backend
+  }
+
+  const handleSchedulePost = async (index, currPosts) => {
+    const sessionToken = localStorage.getItem("session_token");
+    try {
+      let utcDate;
+      if (index === 0) {
+        utcDate = getNextWeekdayTime(1, 9); // Monday at 9 AM
+      } else if (index === 1) {
+        utcDate = getNextWeekdayTime(3, 11); // Wednesday at 11 AM
+      } else if (index === 2) {
+        utcDate = getNextWeekdayTime(5, 15); // Friday at 3 PM
+      }
+      console.log("Time is in UTC:", utcDate);
+
+      await axios.post(
+        `${BASE_URL}/schedule_post`,
+        {
+          postContent: currPosts[index],
+          userId: userProfile.userId,
+          index: index,
+          scheduledTime: utcDate,
+        },
+        { headers: { Authorization: sessionToken } }
+      );
+      console.log("Post scheduled successfully");
+    } catch (error) {
+      console.error("Error scheduling post:", error);
+    }
+  };
 
   const themes = [
     "Current Trends",
@@ -118,7 +188,7 @@ export default function ContentCalendar() {
 
   return (
     <div className="calendar-container">
-      <div className="logo">🦖 Zilla</div>
+      <div className="calender-logo">🦖 Zilla</div>
       <div className="calender-buttons-container">
         <div className="calendar-toggle">
           <button
@@ -211,21 +281,78 @@ export default function ContentCalendar() {
                   "3:00pm",
                 ],
               ].map((row, i) => (
-                <tr key={i}>
-                  {row.map((cell, j) => (
-                    <td key={j}>{cell}</td>
-                  ))}
-                  <td>
-                    <button
-                      className={`confirm-btn ${
-                        confirmed[i] ? "confirmed" : ""
-                      }`}
-                      onClick={() => toggleConfirmation(i)}
-                    >
-                      {confirmed[i] ? "✅" : "Confirm"}
-                    </button>
-                  </td>
-                </tr>
+                <>
+                  <tr key={i}>
+                    {row.map((cell, j) => (
+                      <td key={j}>{cell}</td>
+                    ))}
+                    <td>
+                      <button
+                        className="write-post-btn"
+                        onClick={() => setEditingIndex(i)}
+                      >
+                        {isScheduled[i] ? "Edit Post" : "Write Post"}
+                      </button>
+                    </td>
+                  </tr>
+                  {editingIndex === i && (
+                    <tr className="editor-row">
+                      <td colSpan={6}>
+                        <textarea
+                          className="post-textarea"
+                          value={posts[i]}
+                          onChange={(e) => {
+                            const updated = [...posts];
+                            updated[i] = e.target.value;
+                            setPosts(updated);
+                          }}
+                          placeholder="Write your post content here..."
+                        />
+                        <div className="schedule-buttons-container">
+                          <button
+                            className="cancel-post-btn"
+                            onClick={() => {
+                              // Just close the editor, don't save
+                              setEditingIndex(null);
+                            }}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="cancel-post-btn-2"
+                            onClick={() => {
+                              const updatedScheduled = [...isScheduled];
+                              updatedScheduled[i] = false;
+                              setIsScheduled(updatedScheduled);
+                              setEditingIndex(null);
+
+                              setPosts((prevPosts) => {
+                                const updatedPosts = [...prevPosts];
+                                updatedPosts[i] = "";
+                                handleSchedulePost(i, updatedPosts);
+                                return updatedPosts;
+                              });
+                            }}
+                          >
+                            Cancel Post
+                          </button>
+                          <button
+                            className="schedule-post-btn"
+                            onClick={() => {
+                              const updatedScheduled = [...isScheduled];
+                              updatedScheduled[i] = true;
+                              setIsScheduled(updatedScheduled);
+                              setEditingIndex(null);
+                              handleSchedulePost(i, posts);
+                            }}
+                          >
+                            Schedule Post
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
               ))}
             </tbody>
           </table>
