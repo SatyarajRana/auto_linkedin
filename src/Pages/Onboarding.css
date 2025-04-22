@@ -91,6 +91,17 @@
   animation: fadeIn 0.6s ease;
 }
 
+.char-warning {
+  color: #ff4d4f;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.next-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .btn {
   padding: 0.75rem 1.5rem;
   font-size: 1.2rem;

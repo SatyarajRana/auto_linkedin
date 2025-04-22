@@ -20,6 +20,8 @@ const questions = [
   "What personal stories connect to my work?",
 ];
 
+const MIN_CHARS = 15;
+
 export default function Onboarding() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState(Array(questions.length).fill(""));
@@ -88,6 +90,11 @@ export default function Onboarding() {
     }
   };
   const handleNext = () => {
+    console.log("Here is the char length");
+
+    console.log(answers[step].trim().length);
+
+    if (answers[step].trim().length < MIN_CHARS) return;
     if (step < questions.length - 1) {
       setStep(step + 1);
     } else {
@@ -163,6 +170,12 @@ export default function Onboarding() {
                   }}
                   placeholder="Type your answer..."
                 />
+                {answers[step].trim().length > 0 &&
+                  answers[step].trim().length < MIN_CHARS && (
+                    <p className="char-warning">
+                      Answer must be at least {MIN_CHARS} characters long.
+                    </p>
+                  )}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -174,7 +187,11 @@ export default function Onboarding() {
             >
               Back
             </button>
-            <button onClick={handleNext} className="btn next-btn">
+            <button
+              onClick={handleNext}
+              className="btn next-btn"
+              disabled={answers[step].trim().length < MIN_CHARS}
+            >
               {step === questions.length - 1 ? "Finish" : "Next"}
             </button>
           </div>
