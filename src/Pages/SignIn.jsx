@@ -57,7 +57,7 @@ export default function HomePage() {
         if (!user_exists) {
           console.log("User does not exist");
 
-          localStorage.setItem("new_user", true);
+          // localStorage.setItem("new_user", true);
           navigate("/onboarding");
         } else {
           navigate("/calender");

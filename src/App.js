@@ -78,10 +78,14 @@ const ProtectedRoute = ({ children }) => {
       try {
         const isTokenValid = await authenticateToken(sessionToken);
         if (!isTokenValid) {
+          setIsValidating(false);
+          console.log("Session token is invalid, redirecting to sign-in page");
+
           localStorage.removeItem("session_token");
           navigate("/signin", { replace: true });
         }
       } catch (error) {
+        setIsValidating(false);
         localStorage.removeItem("session_token");
         navigate("/signin", { replace: true });
       } finally {

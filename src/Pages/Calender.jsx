@@ -10,7 +10,7 @@ export default function ContentCalendar() {
   const navigate = useNavigate();
   const [pillars] = useState(["Problems", "Processes", "Perspective", "Proof"]);
   const [confirmed, setConfirmed] = useState([false, false, false]);
-  const [token] = useState(localStorage.getItem("session_token"));
+  // const [token] = useState(localStorage.getItem("session_token"));
   const [userProfile, setUserProfile] = useState(null);
   const [topics, setTopics] = useState([
     "Topic Idea 1",
@@ -24,39 +24,63 @@ export default function ContentCalendar() {
       const token = localStorage.getItem("session_token");
       if (!token) {
         navigate("/signin");
+      } else {
+        try {
+          fetchUserProfile(token);
+        } catch (error) {
+          console.error("Error fetching LinkedIn profile:", error);
+        }
+        // fetchUserProfile(token).then(() => {
+        //   if (userProfile.onboarding_completed === false) {
+        //     navigate("/onboarding");
+        //   }
+        // });
       }
-      if (localStorage.getItem("new_user") === "true") {
-        navigate("/onboarding");
-      }
-      fetchUserProfile(token);
+
+      // if (localStorage.getItem("new_user") === "true") {
+      //   navigate("/onboarding");
+      // } else {
+      //   fetchUserProfile(token);
+      // // }
     }
-  }, [userProfile, navigate, token]);
+  });
 
   const fetchUserProfile = async (token) => {
+    console.log("Fetching user profile");
+
     try {
       const response = await axios.get(`${BASE_URL}/linkedin/me`, {
         headers: { Authorization: token },
       });
       console.log("User Profile:", response.data.userInfo);
       const onboardingAnswers = response.data.userInfo.onboarding_answers;
-
-      setUserProfile(response.data.userInfo);
-      if (response.data.userInfo.topicIdeas.length < 3) {
-        console.log("Setting topics");
-
-        setTopics(
-          await axios.post(
-            `${BASE_URL}/onboarding`,
-            { answers: onboardingAnswers },
-            { headers: { Authorization: token } }
-          )
-        );
-        // refresh the page
-        window.location.reload();
+      if (response.data.userInfo.onboarding_completed === false) {
+        console.log("Onboarding not completed");
+        navigate("/onboarding");
       } else {
-        setTopics(response.data.userInfo.topicIdeas);
+        setUserProfile(response.data.userInfo);
+        if (response.data.userInfo.topicIdeas.length < 3) {
+          console.log("Setting topics");
+
+          setTopics(
+            await axios.post(
+              `${BASE_URL}/onboarding`,
+              { answers: onboardingAnswers },
+              { headers: { Authorization: token } }
+            )
+          );
+          // refresh the page
+          window.location.reload();
+        } else {
+          setTopics(response.data.userInfo.topicIdeas);
+        }
       }
     } catch (error) {
+      if (error.response.data.error === "User not found") {
+        localStorage.removeItem("session_token");
+        navigate("/signin");
+      }
+
       console.error("Error fetching LinkedIn profile:", error);
     }
   };
@@ -80,6 +104,11 @@ export default function ContentCalendar() {
     });
   };
 
+  // const handleEditAnswers = () => {
+  //   localStorage.setItem("onboarding", "true");
+  //   navigate("/onboarding");
+  // };
+
   const themes = [
     "Current Trends",
     "Client Questions",
@@ -90,20 +119,26 @@ export default function ContentCalendar() {
   return (
     <div className="calendar-container">
       <div className="logo">🦖 Zilla</div>
-      <div className="calendar-toggle">
-        <button
-          className={`toggle-btn ${activeView === "monthly" ? "active" : ""}`}
-          onClick={() => setActiveView("monthly")}
-        >
-          Monthly View
-        </button>
-        <button
-          className={`toggle-btn ${activeView === "weekly" ? "active" : ""}`}
-          onClick={() => setActiveView("weekly")}
-        >
-          Weekly Breakdown
-        </button>
+      <div className="calender-buttons-container">
+        <div className="calendar-toggle">
+          <button
+            className={`toggle-btn ${activeView === "monthly" ? "active" : ""}`}
+            onClick={() => setActiveView("monthly")}
+          >
+            Monthly View
+          </button>
+          <button
+            className={`toggle-btn ${activeView === "weekly" ? "active" : ""}`}
+            onClick={() => setActiveView("weekly")}
+          >
+            Weekly Breakdown
+          </button>
+        </div>
+        {/* <button className="edit-pillars-button" onClick={handleEditAnswers}>
+          Edit my Answers
+        </button> */}
       </div>
+
       {activeView === "monthly" && (
         <div className="monthly-view-container">
           {/* <h2>Monthly View</h2> */}

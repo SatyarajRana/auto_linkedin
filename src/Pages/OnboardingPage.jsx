@@ -25,17 +25,34 @@ export default function Onboarding() {
   const [answers, setAnswers] = useState(Array(questions.length).fill(""));
   const navigate = useNavigate();
   const textareaRef = useRef(null);
+  const [userProfile, setUserProfile] = useState(null);
 
   // const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
   const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
 
   useEffect(() => {
-    const new_user = localStorage.getItem("new_user");
-    console.log("new_user", new_user);
-    if (!new_user || new_user !== "true") {
-      navigate("/signin");
+    // const new_user = localStorage.getItem("new_user");
+    // console.log("new_user", new_user);
+    // if (!new_user || new_user !== "true") {
+    //   navigate("/signin");
+    // }
+    if (!userProfile) {
+      const token = localStorage.getItem("session_token");
+      if (!token) {
+        navigate("/signin");
+      } else {
+        try {
+          fetchUserProfile(token);
+        } catch (error) {
+          console.error("Error fetching LinkedIn profile:", error);
+        }
+      }
+    } else {
+      if (userProfile.onboarding_completed === true) {
+        console.log("Onboarding already completed");
+        navigate("/calender");
+      }
     }
-
     setTimeout(() => {
       if (textareaRef.current) {
         console.log("Here");
@@ -43,7 +60,33 @@ export default function Onboarding() {
         textareaRef.current.focus();
       }
     }, 500);
-  }, [navigate, step]);
+  });
+
+  const fetchUserProfile = async (token) => {
+    console.log("Fetching user profile");
+
+    try {
+      const response = await axios.get(`${BASE_URL}/linkedin/me`, {
+        headers: { Authorization: token },
+      });
+      console.log("User Profile:", response.data.userInfo);
+      // const onboardingAnswers = response.data.userInfo.onboarding_answers;
+      if (response.data.userInfo.onboarding_completed === true) {
+        console.log("Onboarding already completed");
+        navigate("/calender");
+      } else {
+        setUserProfile(response.data.userInfo);
+      }
+    } catch (error) {
+      // console.log(error.response.data.error);
+      if (error.response.data.error === "User not found") {
+        localStorage.removeItem("session_token");
+        navigate("/signin");
+      }
+
+      console.error("Error fetching LinkedIn profile:", error);
+    }
+  };
   const handleNext = () => {
     if (step < questions.length - 1) {
       setStep(step + 1);

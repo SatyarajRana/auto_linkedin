@@ -16,7 +16,14 @@
   font-size: 35px;
   color: #000;
   /* margin-bottom: 20px; */
-  margin-top: 20px;
+  margin-top: 10px;
+}
+
+.calender-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .monthly-view-container {
@@ -40,6 +47,17 @@
 }
 
 .toggle-btn {
+  padding: 0.7rem 1.5rem;
+  background-color: #f0f0f0;
+  border: 2px solid #1e2a69;
+  color: #1e2a69;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.edit-pillars-button {
+  width: 15%;
   padding: 0.7rem 1.5rem;
   background-color: #f0f0f0;
   border: 2px solid #1e2a69;

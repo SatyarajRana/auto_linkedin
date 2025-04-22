@@ -23,14 +23,18 @@ const Dashboard = () => {
   // const postsFetchedRef = useRef(false);
   useEffect(() => {
     if (!userProfile) {
-      // const token = localStorage.getItem("session_token");
+      const token = localStorage.getItem("session_token");
       if (!token) {
         navigate("/signin");
       }
       if (localStorage.getItem("new_user") === "true") {
         navigate("/onboarding");
       }
-      fetchUserProfile(token);
+      fetchUserProfile(token).then(() => {
+        if (userProfile.onboarding_completed === false) {
+          navigate("/onboarding");
+        }
+      });
     }
   }, [userProfile, navigate, token]);
 
