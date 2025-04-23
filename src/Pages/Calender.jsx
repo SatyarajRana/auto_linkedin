@@ -21,6 +21,7 @@ export default function ContentCalendar() {
 
   const [editingIndex, setEditingIndex] = useState(null);
   const [posts, setPosts] = useState(["", "", ""]);
+  const [newPosts, setNewPosts] = useState(["", "", ""]);
   const [isScheduled, setIsScheduled] = useState([false, false, false]);
 
   useEffect(() => {
@@ -73,6 +74,7 @@ export default function ContentCalendar() {
             userInfo.tasks[2]?.content || "",
           ];
           setPosts(userPosts); // Set the posts array based on the user tasks
+          setNewPosts(userPosts); // Set the new posts array based on the user tasks
           const scheduledStatus = [
             !!userInfo.tasks[0]?.content,
             !!userInfo.tasks[1]?.content,
@@ -301,11 +303,11 @@ export default function ContentCalendar() {
                       <td colSpan={6}>
                         <textarea
                           className="post-textarea"
-                          value={posts[i]}
+                          value={newPosts[i]}
                           onChange={(e) => {
                             const updated = [...posts];
                             updated[i] = e.target.value;
-                            setPosts(updated);
+                            setNewPosts(updated);
                           }}
                           placeholder="Write your post content here..."
                         />
@@ -315,6 +317,12 @@ export default function ContentCalendar() {
                             onClick={() => {
                               // Just close the editor, don't save
                               setEditingIndex(null);
+                              // setPosts(userProfile.tasks[i]?.content || "");
+                              setNewPosts((prevPosts) => {
+                                const updatedPosts = [...prevPosts];
+                                updatedPosts[i] = posts[i];
+                                return updatedPosts;
+                              });
                             }}
                           >
                             Cancel
@@ -333,6 +341,12 @@ export default function ContentCalendar() {
                                 handleSchedulePost(i, updatedPosts);
                                 return updatedPosts;
                               });
+                              setNewPosts((prevPosts) => {
+                                const updatedPosts = [...prevPosts];
+                                updatedPosts[i] = "";
+                                handleSchedulePost(i, updatedPosts);
+                                return updatedPosts;
+                              });
                             }}
                           >
                             Cancel Post
@@ -344,8 +358,9 @@ export default function ContentCalendar() {
                               updatedScheduled[i] = true;
                               setIsScheduled(updatedScheduled);
                               setEditingIndex(null);
-                              handleSchedulePost(i, posts);
+                              handleSchedulePost(i, newPosts);
                             }}
+                            disabled={!newPosts[i]}
                           >
                             Schedule Post
                           </button>
