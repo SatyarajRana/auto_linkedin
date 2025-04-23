@@ -12,12 +12,24 @@ import Onboarding from "./Pages/OnboardingPage";
 import Calender from "./Pages/Calender";
 import axios from "axios";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
 const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
 
 function App() {
   return (
     <Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
       <Routes>
         <Route path="/signin" element={<HomePage />} />
         <Route

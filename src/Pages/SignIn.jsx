@@ -63,6 +63,10 @@ export default function HomePage() {
           navigate("/calender");
         }
       } catch (error) {
+        alert("Error authenticating with Linkedin. Please try again later.");
+        setTimeout(() => {
+          navigate("/signin");
+        }, 2000);
         console.error("Error exchanging code for token", error);
       }
     };

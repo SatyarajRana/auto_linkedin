@@ -90,10 +90,6 @@ export default function Onboarding() {
     }
   };
   const handleNext = () => {
-    console.log("Here is the char length");
-
-    console.log(answers[step].trim().length);
-
     if (answers[step].trim().length < MIN_CHARS) return;
     if (step < questions.length - 1) {
       setStep(step + 1);
@@ -115,22 +111,27 @@ export default function Onboarding() {
   };
 
   const handleSubmit = async () => {
-    await axios.post(
-      `${BASE_URL}/onboarding`,
-      {
-        answers,
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem("session_token"),
+    try {
+      await axios.post(
+        `${BASE_URL}/onboarding`,
+        {
+          answers,
         },
-      }
-    );
-    localStorage.removeItem("new_user");
-    // setTimeout(() => {
-    navigate("/calender");
-    // }, 30000);
-    // Send to backend or store in context
+        {
+          headers: {
+            Authorization: localStorage.getItem("session_token"),
+          },
+        }
+      );
+      navigate("/calender");
+    } catch (error) {
+      alert("There was an error during onboarding. Please try again later.");
+
+      setTimeout(() => {
+        navigate("/onboarding");
+      }, 2000);
+      console.error("Error submitting onboarding answers:", error);
+    }
   };
 
   return (

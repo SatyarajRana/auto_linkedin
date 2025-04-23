@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Calender.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
 const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
@@ -176,7 +177,11 @@ export default function ContentCalendar() {
         },
         { headers: { Authorization: sessionToken } }
       );
-      console.log("Post scheduled successfully");
+      if (currPosts[index] === "") {
+        toast.success("Post cancelled successfully");
+      } else {
+        toast.success("Post scheduled successfully");
+      }
     } catch (error) {
       console.error("Error scheduling post:", error);
     }
@@ -344,7 +349,6 @@ export default function ContentCalendar() {
                               setNewPosts((prevPosts) => {
                                 const updatedPosts = [...prevPosts];
                                 updatedPosts[i] = "";
-                                handleSchedulePost(i, updatedPosts);
                                 return updatedPosts;
                               });
                             }}
