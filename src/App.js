@@ -15,8 +15,15 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
-const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
+var BASE_URL;
+const env = process.env.REACT_APP_ENVIRONMENT;
+if (env === "production") {
+  // Production URL
+  BASE_URL = process.env.REACT_APP_PRODUCTION_URL;
+} else {
+  // Development URL
+  BASE_URL = process.env.REACT_APP_DEVELOPMENT_URL;
+}
 
 function App() {
   return (
@@ -50,6 +57,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* <Route path="/onboarding2" element={<OnboardingPage />} /> */}
         {/* <Route path="/calender" element={<Calender />} /> */}
       </Routes>
     </Router>

@@ -5,17 +5,27 @@ import axios from "axios";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
 
-// const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
-const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
+var BASE_URL;
+var REDIRECT_URI;
 
-const REDIRECT_URI = "https://linked-in-test-v1.netlify.app/signin";
-// const REDIRECT_URI = "http://localhost:3000/signin";
+const env = process.env.REACT_APP_ENVIRONMENT;
+if (env === "production") {
+  // Production URL
+  BASE_URL = process.env.REACT_APP_PRODUCTION_URL;
+  REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI_PRODUCTION;
+} else {
+  // Development URL
+  REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI_DEVELOPMENT;
+  BASE_URL = process.env.REACT_APP_DEVELOPMENT_URL;
+}
 
 export default function HomePage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("BASE_URL", BASE_URL);
+
     const token = localStorage.getItem("session_token");
 
     const authenticateToken = async (token) => {
@@ -63,10 +73,6 @@ export default function HomePage() {
           navigate("/calender");
         }
       } catch (error) {
-        alert("Error authenticating with Linkedin. Please try again later.");
-        setTimeout(() => {
-          navigate("/signin");
-        }, 2000);
         console.error("Error exchanging code for token", error);
       }
     };
@@ -90,7 +96,7 @@ export default function HomePage() {
           </div>
           <div className="form-content">
             <div className="form-header">
-              <p className="subtitle">
+              <p className="signup-subtitle">
                 {" "}
                 <h1>Welcome to Zilla</h1>Simplify the process of creating and
                 posting engaging content on LinkedIn

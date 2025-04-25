@@ -1,51 +1,50 @@
-/* Global Styles */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
-}
-
+/* body { */
+/* font-family: Arial, sans-serif; */
+/* background-color: #f4f4f4; */
+/* margin: 0;
+  padding: 0; */
+/* } */
+/*  
 .container {
   /* max-width: 800px; */
-  margin: 50px auto;
+/* margin: 50px auto;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
+} */
+/* 
 h2,
 h3 {
   text-align: center;
   color: #333;
-}
+} */
 
 /* Profile Section */
-.profile {
+/* .profile {
   text-align: center;
   padding: 10px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 20px;
-}
+} */
 
 /* Form Elements */
-label {
+/* label {
   display: block;
   margin: 10px 0 5px;
   font-weight: bold;
-}
+} */
 
-input[type="text"],
+/* input[type="text"],
 textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
-}
+} */
 
-button {
+/* button {
   background: #0073b1;
   color: #fff;
   border: none;
@@ -55,15 +54,15 @@ button {
   border-radius: 5px;
   display: block;
   width: 100%;
-  margin-top: 10px;
-}
+  margin-top: 10px; */
+/* }  */
 
 /* button:hover {
   background: #005f8b;
 } */
 
 /* Posts Section */
-.posts {
+/* .posts {
   margin-top: 20px;
 }
 
@@ -86,4 +85,4 @@ button {
 
 .logout-btn:hover {
   background: #c9302c;
-}
+} */

@@ -16,9 +16,15 @@ const Dashboard = () => {
   // const [postsFetched, setPostsFetched] = useState(false);
 
   // const URL = "https://www.linkedin.com/in/rajstriver/recent-activity/all/";
-  // const BASE_URL =
-  // "http://127.0.0.1:5001/auto-linkedin-backend/us-central1/api";
-  const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
+  var BASE_URL;
+  const env = process.env.REACT_APP_ENVIRONMENT;
+  if (env === "production") {
+    // Production URL
+    BASE_URL = process.env.REACT_APP_PRODUCTION_URL;
+  } else {
+    // Development URL
+    BASE_URL = process.env.REACT_APP_DEVELOPMENT_URL;
+  }
 
   // const postsFetchedRef = useRef(false);
   useEffect(() => {
@@ -68,20 +74,6 @@ const Dashboard = () => {
       );
     }
   };
-
-  // const fetchUserPosts = async () => {
-  //   try {
-  //     const response = await axios.get(`${BASE_URL}/linkedin/posts`, {
-  //       params: {
-  //         url: URL,
-  //         count: 10,
-  //       },
-  //     });
-  //     setPosts(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching LinkedIn posts:", error);
-  //   }
-  // };
 
   const generatePost = async () => {
     if (!contextText) {

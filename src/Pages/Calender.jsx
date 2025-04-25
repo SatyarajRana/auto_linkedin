@@ -5,8 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // const BASE_URL = "http://127.0.0.1:5001/linkedin-app-v1/us-central1/api";
-const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
+// const BASE_URL = "https://api-5hstctgwfa-uc.a.run.app";
 
+var BASE_URL;
+const env = process.env.REACT_APP_ENVIRONMENT;
+if (env === "production") {
+  // Production URL
+  BASE_URL = process.env.REACT_APP_PRODUCTION_URL;
+} else {
+  // Development URL
+  BASE_URL = process.env.REACT_APP_DEVELOPMENT_URL;
+}
+
+const MAX_CHARS = 3000;
 export default function ContentCalendar() {
   const navigate = useNavigate();
   const [pillars] = useState(["Problems", "Processes", "Perspective", "Proof"]);
@@ -200,13 +211,17 @@ export default function ContentCalendar() {
       <div className="calender-buttons-container">
         <div className="calendar-toggle">
           <button
-            className={`toggle-btn ${activeView === "monthly" ? "active" : ""}`}
+            className={`calendar-toggle-btn ${
+              activeView === "monthly" ? "active" : ""
+            }`}
             onClick={() => setActiveView("monthly")}
           >
             Monthly View
           </button>
           <button
-            className={`toggle-btn ${activeView === "weekly" ? "active" : ""}`}
+            className={`calendar-toggle-btn ${
+              activeView === "weekly" ? "active" : ""
+            }`}
             onClick={() => setActiveView("weekly")}
           >
             Weekly Breakdown
@@ -310,12 +325,21 @@ export default function ContentCalendar() {
                           className="post-textarea"
                           value={newPosts[i]}
                           onChange={(e) => {
-                            const updated = [...posts];
-                            updated[i] = e.target.value;
-                            setNewPosts(updated);
+                            const value = e.target.value;
+                            if (value.length <= MAX_CHARS) {
+                              const updated = [...newPosts];
+                              updated[i] = value;
+                              setNewPosts(updated);
+                            }
                           }}
                           placeholder="Write your post content here..."
                         />
+                        {newPosts[i].trim().length === MAX_CHARS && (
+                          <p className="char-warning">
+                            Post cannot be more than {MAX_CHARS} characters
+                            long.
+                          </p>
+                        )}
                         <div className="schedule-buttons-container">
                           <button
                             className="cancel-post-btn"
