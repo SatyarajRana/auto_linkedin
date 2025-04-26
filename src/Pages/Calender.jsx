@@ -102,7 +102,7 @@ export default function ContentCalendar() {
           setTopics(
             await axios.post(
               `${BASE_URL}/onboarding`,
-              { answers: userInfo.onboarding_answers },
+              { onboardingParagraph: userInfo.onboarding_paragraph },
               { headers: { Authorization: token } }
             )
           );

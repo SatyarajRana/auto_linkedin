@@ -9,6 +9,7 @@ const MIN_CHARS = 1;
 export default function Onboarding() {
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [editableAnswers, setEditableAnswers] = useState({
     teamType: "",
@@ -80,11 +81,13 @@ export default function Onboarding() {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     try {
+      const onboardingParagraph = `We help ${editableAnswers.teamType} in ${editableAnswers.industry} to ${editableAnswers.mainGoal} by ${editableAnswers.valueProp}`;
       await axios.post(
         `${BASE_URL}/onboarding`,
         {
-          editableAnswers,
+          onboardingParagraph,
         },
         {
           headers: {
@@ -94,6 +97,7 @@ export default function Onboarding() {
       );
       navigate("/calender");
     } catch (error) {
+      setIsLoading(false);
       alert("There was an error during onboarding. Please try again later.");
 
       setTimeout(() => {
@@ -170,6 +174,19 @@ export default function Onboarding() {
           className="illustration"
         />
       </div>
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="fancy-loader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p className="loading-overlay-text">
+            Generating your Content Calendar using AI...
+          </p>
+        </div>
+      )}
     </div>
   );
 }
