@@ -9,7 +9,7 @@ import {
 import HomePage from "./Pages/SignIn";
 import Dashboard from "./Pages/Dashboard";
 import Onboarding from "./Pages/OnboardingPage";
-import Calender from "./Pages/Calender";
+import Calendar from "./Pages/Calender";
 import axios from "axios";
 
 import { ToastContainer } from "react-toastify";
@@ -47,13 +47,13 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/calender" replace />} />
+        <Route path="*" element={<Navigate to="/calendar" replace />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route
-          path="/calender"
+          path="/calendar"
           element={
             <ProtectedRoute>
-              <Calender />
+              <Calendar />
             </ProtectedRoute>
           }
         />
