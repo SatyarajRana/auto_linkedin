@@ -10,6 +10,7 @@ import HomePage from "./Pages/SignIn";
 import Dashboard from "./Pages/Dashboard";
 import Onboarding from "./Pages/OnboardingPage";
 import Calendar from "./Pages/Calender";
+import Billing from "./Pages/Billing";
 import axios from "axios";
 
 import { ToastContainer } from "react-toastify";
@@ -57,6 +58,13 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/billing" element={<Billing />} />
+        <Route
+          path="/success"
+          element={<div>Payment was successfully completed!!!</div>}
+        />
+        <Route path="/cancel" element={<div>Payment was cancelled!!!</div>} />
+
         {/* <Route path="/onboarding2" element={<OnboardingPage />} /> */}
         {/* <Route path="/calender" element={<Calender />} /> */}
       </Routes>

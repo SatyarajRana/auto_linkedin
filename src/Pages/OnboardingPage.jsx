@@ -43,7 +43,7 @@ export default function Onboarding() {
     } else {
       if (userProfile.onboarding_completed === true) {
         console.log("Onboarding already completed");
-        navigate("/calender");
+        navigate("/calendar");
       }
     }
   });
@@ -59,7 +59,7 @@ export default function Onboarding() {
       // const onboardingAnswers = response.data.userInfo.onboarding_answers;
       if (response.data.userInfo.onboarding_completed === true) {
         console.log("Onboarding already completed");
-        navigate("/calender");
+        navigate("/calendar");
       } else {
         setUserProfile(response.data.userInfo);
       }
@@ -95,7 +95,7 @@ export default function Onboarding() {
           },
         }
       );
-      navigate("/calender");
+      navigate("/calendar");
     } catch (error) {
       setIsLoading(false);
       alert("There was an error during onboarding. Please try again later.");
