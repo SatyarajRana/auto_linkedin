@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaCheck, FaStar } from "react-icons/fa";
+import "./Billing.css";
 
 const stripePublishableKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = loadStripe(stripePublishableKey);
@@ -22,6 +24,10 @@ export default function Billing() {
       priceId: "price_1RIpuX1qu4fHYTift3grIJ3Z",
     },
   ]);
+  const [isYearly, setIsYearly] = useState(false);
+
+  const price = isYearly ? 29 * 10 : 29;
+  const periodLabel = isYearly ? "/year" : "/month";
 
   var BASE_URL;
   const env = process.env.REACT_APP_ENVIRONMENT;
@@ -79,15 +85,8 @@ export default function Billing() {
     }
   };
 
-  async function handleSubscribe(priceId) {
-    // Call backend to create Checkout session
-    // const res = await fetch("/create-checkout-session", {
-    //   method: "POST",
-    //   {
-    //     Authorization: localStorage.getItem("session_token"),
-    //   },
-    //   body: JSON.stringify({ priceId }),
-    // });
+  async function handleSubscribe() {
+    const priceId = products[0].priceId;
     const res = await axios.post(
       `${BASE_URL}/create-stripe-checkout-session`,
       { priceId },
@@ -104,12 +103,102 @@ export default function Billing() {
     await stripe.redirectToCheckout({ sessionId });
   }
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h3>{products[0].name}</h3>
-      <p>{products[0].description}</p>
-      <button onClick={() => handleSubscribe(products[0].priceId)}>
-        Subscribe ${products[0].price} ${products[0].currency}/month
-      </button>
+    <div className="billing-container">
+      <div className="billing-page">
+        <div className="billing-header">
+          <h1>Join Our Growing Community</h1>
+          <p className="subtitle">
+            Subscribe today and experience the complete power of PostZilla🦖.
+            100% satisfaction guaranteed.
+          </p>
+        </div>
+
+        <div className="plan-card">
+          <div className="plan-header">
+            {/* Decorative Circles */}
+            <div className="circle light-blue"></div>
+            <div className="circle yellow top-right"></div>
+            <div className="circle yellow bottom-right"></div>
+
+            <span className="plan-name">Pro Plan</span>
+            <span className="badge"> All-Inclusive</span>
+          </div>
+
+          <div className="plan-price">
+            <span className="price">${price}</span>
+            <span className="period">{periodLabel}</span>
+            {isYearly && <span className="save-badge">Save 20%</span>}
+          </div>
+
+          <ul className="features-list">
+            {[
+              "Content Calendar",
+              "AI Post Generation",
+              "Post Topic Ideas",
+              "Post Analytics",
+              "Post Scheduling",
+            ].map((feat) => (
+              <li key={feat}>
+                <FaCheck className="icon" /> {feat}
+              </li>
+            ))}
+          </ul>
+
+          <div className="billing-toggle">
+            <span>Monthly</span>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={isYearly}
+                onChange={() => setIsYearly(!isYearly)}
+              />
+              <span className="slider" />
+            </label>
+            <span>Yearly (2 months free)</span>
+          </div>
+
+          <button className="subscribe-button" onClick={handleSubscribe}>
+            Upgrade Now
+          </button>
+
+          {/* <div className="security-info">
+            <div>
+              <FaLock className="icon" /> Secure payment
+            </div>
+            <div>
+              <FaUndo className="icon" /> 30-day money-back guarantee
+            </div>
+          </div> */}
+        </div>
+
+        <div className="testimonial">
+          <div className="stars">
+            {[...Array(5)].map((_, i) => (
+              <FaStar key={i} />
+            ))}
+          </div>
+          <blockquote>
+            "Getting PostZilla Pro Plan was the best decision for our team. The
+            advanced features have significantly increased our Linkedin Post
+            Impressions and Outreach.
+          </blockquote>
+          <div className="author">
+            {/* Replace src with your real avatar URL */}
+            <img
+              src="/path/to/avatar.jpg"
+              alt="Michael Thompson"
+              className="avatar"
+            />
+            <div>
+              <p className="name">Michael Thompson</p>
+              <p className="role">Product Manager, TechCorp</p>
+            </div>
+          </div>
+          {/* <p className="faq-link">
+            <a href="/faq">Have questions? Check our FAQ →</a>
+          </p> */}
+        </div>
+      </div>
     </div>
   );
 }

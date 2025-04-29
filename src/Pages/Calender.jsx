@@ -76,6 +76,16 @@ export default function ContentCalendar() {
         console.log("Onboarding not completed");
         navigate("/onboarding");
       } else {
+        if (userInfo.isSubscribed === false) {
+          const createdAt = new Date(userInfo.created_at);
+          const now = new Date();
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(now.getDate() - 30);
+
+          if (createdAt < thirtyDaysAgo) {
+            navigate("/billing");
+          }
+        }
         setUserProfile(userInfo);
 
         //Check if user has tasks
