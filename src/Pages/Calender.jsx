@@ -85,41 +85,42 @@ export default function ContentCalendar() {
           if (createdAt < thirtyDaysAgo) {
             navigate("/billing");
           }
-        }
-        setUserProfile(userInfo);
-
-        //Check if user has tasks
-        if (userInfo.tasks) {
-          const userPosts = [
-            userInfo.tasks[0]?.content || "",
-            userInfo.tasks[1]?.content || "",
-            userInfo.tasks[2]?.content || "",
-          ];
-          setPosts(userPosts); // Set the posts array based on the user tasks
-          setNewPosts(userPosts); // Set the new posts array based on the user tasks
-          const scheduledStatus = [
-            !!userInfo.tasks[0]?.content,
-            !!userInfo.tasks[1]?.content,
-            !!userInfo.tasks[2]?.content,
-          ];
-
-          setIsScheduled(scheduledStatus); // Set the scheduled status based on user tasks
-        }
-
-        //Set topics if necessary
-        if (userInfo.topicIdeas.length < 3) {
-          console.log("Setting topics");
-          setTopics(
-            await axios.post(
-              `${BASE_URL}/onboarding`,
-              { onboardingParagraph: userInfo.onboarding_paragraph },
-              { headers: { Authorization: token } }
-            )
-          );
-          // Refresh the page
-          window.location.reload();
         } else {
-          setTopics(userInfo.topicIdeas);
+          setUserProfile(userInfo);
+
+          //Check if user has tasks
+          if (userInfo.tasks) {
+            const userPosts = [
+              userInfo.tasks[0]?.content || "",
+              userInfo.tasks[1]?.content || "",
+              userInfo.tasks[2]?.content || "",
+            ];
+            setPosts(userPosts); // Set the posts array based on the user tasks
+            setNewPosts(userPosts); // Set the new posts array based on the user tasks
+            const scheduledStatus = [
+              !!userInfo.tasks[0]?.content,
+              !!userInfo.tasks[1]?.content,
+              !!userInfo.tasks[2]?.content,
+            ];
+
+            setIsScheduled(scheduledStatus); // Set the scheduled status based on user tasks
+          }
+
+          //Set topics if necessary
+          if (userInfo.topicIdeas.length < 3) {
+            console.log("Setting topics");
+            setTopics(
+              await axios.post(
+                `${BASE_URL}/onboarding`,
+                { onboardingParagraph: userInfo.onboarding_paragraph },
+                { headers: { Authorization: token } }
+              )
+            );
+            // Refresh the page
+            window.location.reload();
+          } else {
+            setTopics(userInfo.topicIdeas);
+          }
         }
       }
     } catch (error) {
