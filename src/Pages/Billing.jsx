@@ -55,6 +55,9 @@ export default function Billing() {
       if (userProfile.onboarding_completed === true) {
         console.log("Onboarding already completed");
         // navigate("/calendar");
+      } else if (userProfile.isSubscribed === true) {
+        console.log("User already subscribed");
+        navigate("/calendar");
       }
     }
   });
