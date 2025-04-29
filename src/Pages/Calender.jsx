@@ -37,6 +37,81 @@ export default function ContentCalendar() {
   const [isScheduled, setIsScheduled] = useState([false, false, false]);
 
   useEffect(() => {
+    console.log("Useeffect called");
+
+    const fetchUserProfile = async (token) => {
+      console.log("Fetching user profile");
+
+      try {
+        const response = await axios.get(`${BASE_URL}/linkedin/me`, {
+          headers: { Authorization: token },
+        });
+        console.log("User Profile:", response.data.userInfo);
+
+        const userInfo = response.data.userInfo;
+        if (userInfo.onboarding_completed === false) {
+          console.log("Onboarding not completed");
+          navigate("/onboarding");
+        } else {
+          if (userInfo.isSubscribed === false) {
+            const createdAt = new Date(userInfo.created_at);
+            const now = new Date();
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(now.getDate() - 30);
+
+            if (createdAt < thirtyDaysAgo) {
+              navigate("/billing");
+            } else {
+              console.log("setting user profile");
+
+              setUserProfile(userInfo);
+
+              //Check if user has tasks
+              if (userInfo.tasks) {
+                const userPosts = [
+                  userInfo.tasks[0]?.content || "",
+                  userInfo.tasks[1]?.content || "",
+                  userInfo.tasks[2]?.content || "",
+                ];
+                setPosts(userPosts); // Set the posts array based on the user tasks
+                setNewPosts(userPosts); // Set the new posts array based on the user tasks
+                const scheduledStatus = [
+                  !!userInfo.tasks[0]?.content,
+                  !!userInfo.tasks[1]?.content,
+                  !!userInfo.tasks[2]?.content,
+                ];
+
+                setIsScheduled(scheduledStatus); // Set the scheduled status based on user tasks
+              }
+
+              //Set topics if necessary
+              if (userInfo.topicIdeas.length < 3) {
+                console.log("Setting topics");
+                setTopics(
+                  await axios.post(
+                    `${BASE_URL}/onboarding`,
+                    { onboardingParagraph: userInfo.onboarding_paragraph },
+                    { headers: { Authorization: token } }
+                  )
+                );
+                // Refresh the page
+                window.location.reload();
+              } else {
+                setTopics(userInfo.topicIdeas);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        if (error.response.data.error === "User not found") {
+          localStorage.removeItem("session_token");
+          navigate("/signin");
+        }
+
+        console.error("Error fetching LinkedIn profile:", error);
+      }
+    };
+
     if (!userProfile) {
       const token = localStorage.getItem("session_token");
       if (!token) {
@@ -60,78 +135,7 @@ export default function ContentCalendar() {
       //   fetchUserProfile(token);
       // // }
     }
-  });
-
-  const fetchUserProfile = async (token) => {
-    console.log("Fetching user profile");
-
-    try {
-      const response = await axios.get(`${BASE_URL}/linkedin/me`, {
-        headers: { Authorization: token },
-      });
-      console.log("User Profile:", response.data.userInfo);
-
-      const userInfo = response.data.userInfo;
-      if (userInfo.onboarding_completed === false) {
-        console.log("Onboarding not completed");
-        navigate("/onboarding");
-      } else {
-        if (userInfo.isSubscribed === false) {
-          const createdAt = new Date(userInfo.created_at);
-          const now = new Date();
-          const thirtyDaysAgo = new Date();
-          thirtyDaysAgo.setDate(now.getDate() - 30);
-
-          if (createdAt < thirtyDaysAgo) {
-            navigate("/billing");
-          }
-        } else {
-          setUserProfile(userInfo);
-
-          //Check if user has tasks
-          if (userInfo.tasks) {
-            const userPosts = [
-              userInfo.tasks[0]?.content || "",
-              userInfo.tasks[1]?.content || "",
-              userInfo.tasks[2]?.content || "",
-            ];
-            setPosts(userPosts); // Set the posts array based on the user tasks
-            setNewPosts(userPosts); // Set the new posts array based on the user tasks
-            const scheduledStatus = [
-              !!userInfo.tasks[0]?.content,
-              !!userInfo.tasks[1]?.content,
-              !!userInfo.tasks[2]?.content,
-            ];
-
-            setIsScheduled(scheduledStatus); // Set the scheduled status based on user tasks
-          }
-
-          //Set topics if necessary
-          if (userInfo.topicIdeas.length < 3) {
-            console.log("Setting topics");
-            setTopics(
-              await axios.post(
-                `${BASE_URL}/onboarding`,
-                { onboardingParagraph: userInfo.onboarding_paragraph },
-                { headers: { Authorization: token } }
-              )
-            );
-            // Refresh the page
-            window.location.reload();
-          } else {
-            setTopics(userInfo.topicIdeas);
-          }
-        }
-      }
-    } catch (error) {
-      if (error.response.data.error === "User not found") {
-        localStorage.removeItem("session_token");
-        navigate("/signin");
-      }
-
-      console.error("Error fetching LinkedIn profile:", error);
-    }
-  };
+  }, [userProfile, navigate]);
 
   //   const getPillars = async (token) => {
   //     try {
@@ -188,6 +192,7 @@ export default function ContentCalendar() {
         utcDate = getNextWeekdayTime(5, 15); // Friday at 3 PM
       }
       console.log("Time is in UTC:", utcDate);
+      console.log("scheduling post for userId:", userProfile);
 
       await axios.post(
         `${BASE_URL}/schedule_post`,
