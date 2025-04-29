@@ -68,9 +68,9 @@ export default function Billing() {
       });
       console.log("User Profile is:", response.data.userInfo);
       // const onboardingAnswers = response.data.userInfo.onboarding_answers;
-      if (response.data.userInfo.onboarding_completed === true) {
-        console.log("Onboarding already completed");
-        // navigate("/calender");
+      if (response.data.userInfo.isSubscribed === true) {
+        console.log("User already subscribed");
+        navigate("/calender");
       } else {
         setUserProfile(response.data.userInfo);
       }
