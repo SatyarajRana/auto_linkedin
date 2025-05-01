@@ -7,9 +7,9 @@ import {
   Navigate,
 } from "react-router-dom";
 import HomePage from "./Pages/SignIn";
-import Dashboard from "./Pages/Dashboard";
+// import Dashboard from "./Pages/Dashboard";
 import Onboarding from "./Pages/OnboardingPage";
-import Calendar from "./Pages/Calender";
+import Calendar from "./Pages/Calendar";
 import Billing from "./Pages/Billing";
 import axios from "axios";
 
@@ -40,14 +40,14 @@ function App() {
       />
       <Routes>
         <Route path="/signin" element={<HomePage />} />
-        <Route
+        {/* <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route path="*" element={<Navigate to="/calendar" replace />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route
@@ -64,8 +64,6 @@ function App() {
           element={<div>Payment was successfully completed!!!</div>}
         />
         <Route path="/cancel" element={<div>Payment was cancelled!!!</div>} />
-
-        {/* <Route path="/onboarding2" element={<OnboardingPage />} /> */}
         {/* <Route path="/calender" element={<Calender />} /> */}
       </Routes>
     </Router>

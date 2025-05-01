@@ -1,0 +1,367 @@
+body {
+  /* background-color: #f9fafb; */
+  background-image: url("../../public/images/dottedbg.jpeg");
+  font-family: "Inter", sans-serif;
+  transition: overflow 0.3s ease;
+}
+
+.calendar-container {
+  padding: 1rem;
+  background-color: #ffffff;
+  color: #1f2937; /* neutral dark text */
+  /* border-radius: 1rem; */
+  max-width: 1000px;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.calendar-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1e2a69; /* navy blue */
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #1e2a69; /* golden yellow */
+}
+
+.calendar-controls button {
+  background-color: transparent;
+  border: 2px solid #1e2a69;
+  color: #1e2a69;
+  border-radius: 9999px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.calendar-controls button:hover {
+  background-color: #ffe57e;
+  color: #0f172a;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  /* margin-bottom: 0.5rem; */
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  background-color: #ffe57e;
+  padding: 12px 0;
+  box-shadow: 0 2px 4px #ffea5eca;
+}
+
+.calendar-weekday {
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: #374151; /* dark gray */
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* background-color: #fffadc; */
+  /* gap: 1rem; */
+}
+
+.calendar-day {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 0.75rem;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendar-day.empty {
+  pointer-events: none;
+}
+
+.calendar-day:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px #facc15ad;
+  cursor: pointer;
+}
+
+.calendar-today {
+  border: 2px solid #facc15;
+  background-color: #fef9c3;
+}
+
+.day-number {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.entry-container {
+  margin-top: 0.5rem;
+}
+
+.entry-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.entry-status {
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  padding: 0.25rem 0.5rem;
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+.entry-status.published {
+  color: #15803d;
+  background-color: rgba(0, 128, 0, 0.225);
+}
+
+.entry-status.scheduled {
+  color: #92400e;
+  background-color: #92410e3b;
+}
+
+.entry-platforms {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+/* Status Colors */
+.status-published {
+  background-color: #15458037;
+  color: #154580;
+}
+.status-scheduled {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-writing {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-default {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+/* Style the drawer content wrapper */
+.drawer-content {
+  font-family: "Inter", sans-serif;
+  padding: 0 0;
+  background-color: #fefefe;
+  border-radius: 8px;
+}
+
+.drawer-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  /* gap: 0.2rem; */
+}
+
+/* Topic idea text */
+
+.topic-idea {
+  /* font-size: 16px; */
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #1e2a69;
+}
+
+/* Edit button next to topic */
+.edit-topic-btn {
+  margin-left: 0.5rem;
+  padding: 0 0.25rem;
+  font-size: 0.85rem;
+}
+
+/* Input when editing topic */
+.topic-edit-input {
+  width: 60%;
+  margin: 0 0.5rem;
+}
+.topic-text {
+  margin: 0 0.5rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* Edit button next to topic */
+.edit-topic-btn {
+  margin-left: 0.5rem;
+  padding: 0 0.25rem;
+  font-size: 0.85rem;
+}
+
+/* Input when editing topic */
+.topic-edit-input {
+  max-width: 50%;
+  margin: 0 0.5rem;
+}
+
+.topic-idea-row {
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* gap: 0.5rem; */
+  /* margin-bottom: 1rem; */
+  width: 90%;
+}
+.theme-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1e2a69;
+}
+
+.edit-topic-btn {
+  margin-left: 0.5rem;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Input area (customizing Ant Design TextArea) */
+.ant-input-textarea {
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Style buttons in the drawer */
+.drawer-actions button {
+  width: 100%;
+  height: 42px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* Primary button */
+/* .drawer-actions button.ant-btn-primary {
+  background-color: #ffdd00;
+  border: none;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 1px 1px 0px black;
+}
+
+.drawer-actions button.ant-btn-primary:hover {
+  background-color: #ffe959;
+} */
+
+/* Secondary button */
+.drawer-actions button.ant-btn-default {
+  background-color: #ffdd00;
+  border: none;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 1px 1px 0px black;
+  color: white;
+}
+
+.drawer-actions button.ant-btn-default:hover {
+  background-color: #ffe958;
+  color: white;
+}
+
+/* Danger dashed button */
+.drawer-actions button.ant-btn-dashed.ant-btn-dangerous {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.drawer-actions button.ant-btn-dashed.ant-btn-dangerous:hover {
+  background-color: #ffe4e6;
+}
+
+.ai-generate-btn {
+  /* display: inline-flex; */
+  /* align-items: center; */
+  /* gap: 8px; */
+  padding: 18px 16px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+  /* background-size: 200% 200%; */
+  animation: gradientShift 4s ease infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(140, 100, 255, 0.3);
+}
+
+.ai-generate-btn:disabled {
+  background-color: #d1d1d1;
+  cursor: not-allowed;
+}
+
+.ai-generate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(140, 100, 255, 0.4);
+}
+
+@media (min-width: 600px) {
+  .topic-idea-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Fancy animated gradient */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Responsive tweaks */
+@media (max-width: 500px) {
+  .drawer-content {
+    padding: 0.5rem;
+  }
+
+  .drawer-actions button {
+    height: 38px;
+    font-size: 13px;
+  }
+}
