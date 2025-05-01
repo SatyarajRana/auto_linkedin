@@ -525,6 +525,7 @@ const ContentCalendar = () => {
                         setEditedTopicIdea(selectedDay.topicIdea);
                         setIsEditingTopic(true);
                       }}
+                      disabled={selectedDay?.status === "Posted"}
                     />
                   </>
                 )}
@@ -536,6 +537,7 @@ const ContentCalendar = () => {
                   onChange={(value) => setSelectedTheme(value)}
                   style={{ width: 200 }}
                   placeholder="Select theme"
+                  disabled={selectedDay?.status === "Posted"}
                 >
                   {themes.map((theme) => (
                     <Select.Option key={theme} value={theme}>
