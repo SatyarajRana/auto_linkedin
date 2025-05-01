@@ -109,7 +109,7 @@ const ContentCalendar = () => {
 
   const getStatusClass = (status) => {
     switch (status) {
-      case "Published":
+      case "Posted":
         return "status-published";
       case "Scheduled":
         return "status-scheduled";
