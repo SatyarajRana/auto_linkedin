@@ -549,7 +549,11 @@ const ContentCalendar = () => {
             <Button
               className="ai-generate-btn"
               onClick={handleGeneratePost}
-              disabled={!selectedDay?.topicIdea || !selectedTheme}
+              disabled={
+                !selectedDay?.topicIdea ||
+                !selectedTheme ||
+                selectedDay?.status === "Posted"
+              }
               loading={isGenerating}
             >
               <Sparkles size={16} style={{ marginRight: "8px" }} />
@@ -562,6 +566,7 @@ const ContentCalendar = () => {
             value={updatedPostContent}
             onChange={handlePostContentChange}
             placeholder="Write your post here..."
+            disabled={selectedDay?.status === "Posted"}
           />
           <div
             className="drawer-actions"
@@ -579,13 +584,28 @@ const ContentCalendar = () => {
               type="default"
               onClick={handleSchedulePost}
               loading={isScheduling}
+              disabled={selectedDay?.status === "Posted"}
             >
-              Schedule Post
+              {selectedDay?.status === "Posted"
+                ? "Post Published"
+                : selectedDay?.status === "Scheduled"
+                ? "Update Post"
+                : "Schedule Post"}
             </Button>
-            <Button type="dashed" danger onClick={handleCancelPost}>
+            <Button
+              type="dashed"
+              danger
+              onClick={handleCancelPost}
+              disabled={selectedDay?.status === "Posted"}
+            >
               Cancel Post
             </Button>
-            <Button type="dashed" danger onClick={handleDeletePost}>
+            <Button
+              type="dashed"
+              danger
+              onClick={handleDeletePost}
+              disabled={selectedDay?.status === "Posted"}
+            >
               Delete Post
             </Button>
           </div>
