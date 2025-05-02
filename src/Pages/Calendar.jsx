@@ -288,7 +288,7 @@ const ContentCalendar = () => {
         `Post scheduled for ${new Date(scheduledTime).toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
-        })} UTC!`
+        })}!`
       );
 
       // Update calendar UI (optional)
