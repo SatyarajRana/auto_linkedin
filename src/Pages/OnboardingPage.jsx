@@ -180,7 +180,7 @@ export default function Onboarding() {
             <span></span>
           </div>
           <p className="loading-overlay-text">
-            Generating your Content Calendar using AI...
+            Zilla is generating your Content Calendar...
           </p>
         </div>
       )}

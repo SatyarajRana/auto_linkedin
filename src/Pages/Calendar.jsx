@@ -162,16 +162,6 @@ const ContentCalendar = () => {
     { month: "long" }
   );
 
-  const weekDays = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
   const handleDayClick = (day) => {
     const dateStr = day.toLocaleDateString("en-CA");
 
@@ -432,6 +422,28 @@ const ContentCalendar = () => {
       />
     );
   };
+
+  const fullWeekDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const shortWeekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const weekDays = isMobile ? shortWeekDays : fullWeekDays;
 
   return (
     <div className="calendar-container">

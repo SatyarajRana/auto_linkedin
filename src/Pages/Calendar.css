@@ -389,6 +389,11 @@
     justify-content: space-between;
   }
 }
+@media screen and (max-width: 768px) {
+  .entry-container {
+    display: none;
+  }
+}
 
 /* Fancy animated gradient */
 @keyframes gradientShift {
@@ -400,17 +405,5 @@
   }
   100% {
     background-position: 0% 50%;
-  }
-}
-
-/* Responsive tweaks */
-@media (max-width: 500px) {
-  .drawer-content {
-    padding: 0.5rem;
-  }
-
-  .drawer-actions button {
-    height: 38px;
-    font-size: 13px;
   }
 }
