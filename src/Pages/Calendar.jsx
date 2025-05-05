@@ -4,6 +4,7 @@ import "./Calendar.css";
 import { Sparkles, Edit3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 import { Drawer, Button, Input, Select } from "antd";
 import axios from "axios";
@@ -408,211 +409,272 @@ const ContentCalendar = () => {
     // toast.success("Topic idea updated.");
   };
 
+  const Particle = ({ index }) => {
+    const delay = Math.random() * 5;
+    const top = Math.random() * 100;
+    const left = Math.random() * 100;
+
+    return (
+      <motion.div
+        className="particle"
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: [0, 1, 0], scale: [0, 1, 0] }}
+        transition={{
+          duration: 4,
+          delay,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{
+          top: `${top}%`,
+          left: `${left}%`,
+        }}
+      />
+    );
+  };
+
   return (
-    <div className={`calendar-container`}>
-      <div className="calendar-header">
-        <h1 className="calendar-title">
-          <CalendarDays /> Content Calendar
-        </h1>
-        <div className="calendar-controls">
-          <button onClick={goToPreviousMonth}>
-            <ChevronLeft />
-          </button>
-          <span>
-            {monthName} {currentYear}
-          </span>
-          <button onClick={goToNextMonth}>
-            <ChevronRight />
-          </button>
-        </div>
-      </div>
-
-      {/* Days of the week */}
-      <div className="calendar-weekdays">
-        {weekDays.map((day) => (
-          <div key={day} className="calendar-weekday">
-            {day}
-          </div>
-        ))}
-      </div>
-
-      {/* Calendar Grid */}
-      <div className="calendar-grid">
-        {/* Add empty cells to align the first day */}
-        {Array(days[0].getDay())
-          .fill(null)
-          .map((_, idx) => (
-            <div key={`empty-${idx}`} className="calendar-day empty"></div>
+    <div className="calendar-container">
+      <div className="calendar">
+        <div className="calendar-header">
+          {[...Array(40)].map((_, i) => (
+            <Particle key={i} index={i} />
           ))}
+          <h1 className="calendar-title">
+            <CalendarDays color="black" className="calendar-icon" /> Content
+            Calendar
+          </h1>
+          <svg
+            className="circuit-pattern"
+            viewBox="0 0 800 200"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0,100 L100,100 L150,50 L250,50 L300,100 L400,100 L450,50 L550,50 L600,100 L700,100 L750,50 L800,50"
+              fill="none"
+              stroke="white"
+              strokeWidth="1"
+            />
+            <path
+              d="M0,150 L100,150 L150,100 L250,100 L300,150 L400,150 L450,100 L550,100 L600,150 L700,150 L750,100 L800,100"
+              fill="none"
+              stroke="white"
+              strokeWidth="1"
+            />
+            <circle cx="100" cy="100" r="3" fill="white" />
+            <circle cx="300" cy="100" r="3" fill="white" />
+            <circle cx="600" cy="100" r="3" fill="white" />
+            <circle cx="100" cy="150" r="3" fill="white" />
+            <circle cx="300" cy="150" r="3" fill="white" />
+            <circle cx="600" cy="150" r="3" fill="white" />
+          </svg>
+          <div className="calendar-controls">
+            <button onClick={goToPreviousMonth}>
+              <ChevronLeft width={25} height={20} />
+            </button>
+            <span>
+              {monthName} {currentYear}
+            </span>
 
-        {/* Actual days */}
-        {days.map((day) => {
-          const dateStr = day.toLocaleDateString("en-CA");
-          const entry = calendarData.find((e) => e.date === dateStr);
-          const isToday = day.toDateString() === today.toDateString();
+            <button onClick={goToNextMonth}>
+              <ChevronRight width={25} height={20} />
+            </button>
+          </div>
+        </div>
 
-          return (
-            <div
-              key={dateStr}
-              className={`calendar-day ${isToday ? "calendar-today" : ""}`}
-              onClick={() => handleDayClick(day)}
-            >
-              <div className="day-number">{day.getDate()}</div>
-              {entry && (
-                <div className="entry-container">
-                  <div className="entry-title">
-                    {entry.topicIdea ? entry.topicIdea : "No topic idea"}
-                  </div>
-                  <div
-                    className={`entry-status ${getStatusClass(entry.status)}`}
-                  >
-                    {entry.status}
-                  </div>
-                </div>
-              )}
+        {/* Days of the week */}
+        <div className="calendar-weekdays">
+          {weekDays.map((day) => (
+            <div key={day} className="calendar-weekday">
+              {day}
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
 
-      {/* Post Editing Card */}
-      <Drawer
-        title={`Edit Post - ${selectedDay?.date}`}
-        placement="right"
-        onClose={handleCloseCard}
-        open={isCardOpen}
-        width={700}
-      >
-        <div className="drawer-content">
-          <div className="drawer-content-header">
-            <div className="topic-idea-row">
-              <div className="topic-idea">
-                <strong>Topic Idea:</strong>
-                {isEditingTopic ? (
-                  <>
-                    <Input
-                      className="topic-edit-input"
-                      value={editedTopicIdea}
-                      onChange={(e) => setEditedTopicIdea(e.target.value)}
-                      maxLength={MAX_CHARS}
-                    />
-                    <Button
-                      size="small"
-                      type="primary"
-                      onClick={handleSaveTopicIdea}
+        {/* Calendar Grid */}
+        <div className="calendar-grid">
+          {/* Add empty cells to align the first day */}
+          {Array(days[0].getDay())
+            .fill(null)
+            .map((_, idx) => (
+              <div key={`empty-${idx}`} className="calendar-day empty"></div>
+            ))}
+
+          {/* Actual days */}
+          {days.map((day) => {
+            const dateStr = day.toLocaleDateString("en-CA");
+            const entry = calendarData.find((e) => e.date === dateStr);
+            const isToday = day.toDateString() === today.toDateString();
+
+            return (
+              <div
+                key={dateStr}
+                className={`calendar-day ${isToday ? "calendar-today" : ""}`}
+                onClick={() => handleDayClick(day)}
+              >
+                <div className="day-number">{day.getDate()}</div>
+                {entry && (
+                  <div className="entry-container">
+                    <div className="entry-title">
+                      {entry.topicIdea
+                        ? entry.topicIdea.length > 40
+                          ? `${entry.topicIdea.slice(0, 40)}...`
+                          : entry.topicIdea
+                        : "No topic idea"}
+                    </div>
+                    <div
+                      className={`entry-status ${getStatusClass(entry.status)}`}
                     >
-                      Save
-                    </Button>
-                    <Button
-                      size="small"
-                      type="text"
-                      onClick={() => setIsEditingTopic(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <span className="topic-text">
-                      {selectedDay?.topicIdea || "Type your post idea here..."}
-                    </span>
-                    <Button
-                      className="edit-topic-btn"
-                      size="small"
-                      type="text"
-                      icon={<Edit3 size={16} />}
-                      onClick={() => {
-                        setEditedTopicIdea(selectedDay.topicIdea);
-                        setIsEditingTopic(true);
-                      }}
-                      disabled={selectedDay?.status === "Posted"}
-                    />
-                  </>
+                      {entry.status}
+                    </div>
+                  </div>
                 )}
               </div>
-              <div className="theme-dropdown">
-                <strong>Theme:</strong>{" "}
-                <Select
-                  value={selectedTheme || undefined}
-                  onChange={(value) => setSelectedTheme(value)}
-                  style={{ width: 200 }}
-                  placeholder="Select theme"
-                  disabled={selectedDay?.status === "Posted"}
-                >
-                  {themes.map((theme) => (
-                    <Select.Option key={theme} value={theme}>
-                      {theme}
-                    </Select.Option>
-                  ))}
-                </Select>
+            );
+          })}
+        </div>
+
+        {/* Post Editing Card */}
+        <Drawer
+          title={`Edit Post - ${selectedDay?.date}`}
+          placement="right"
+          onClose={handleCloseCard}
+          open={isCardOpen}
+          width={700}
+          className="post-editing-drawer"
+        >
+          <div className="drawer-content">
+            <div className="drawer-content-header">
+              <div className="topic-idea-row">
+                <div className="topic-idea">
+                  <strong>Topic Idea:</strong>
+                  {isEditingTopic ? (
+                    <>
+                      <Input
+                        className="topic-edit-input"
+                        value={editedTopicIdea}
+                        onChange={(e) => setEditedTopicIdea(e.target.value)}
+                        maxLength={MAX_CHARS}
+                      />
+                      <Button
+                        size="small"
+                        type="primary"
+                        onClick={handleSaveTopicIdea}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        size="small"
+                        type="text"
+                        onClick={() => setIsEditingTopic(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="topic-text">
+                        {selectedDay?.topicIdea ||
+                          "Type your post idea here..."}
+                      </span>
+                      <Button
+                        className="edit-topic-btn"
+                        size="small"
+                        type="text"
+                        icon={<Edit3 size={16} />}
+                        onClick={() => {
+                          setEditedTopicIdea(selectedDay.topicIdea);
+                          setIsEditingTopic(true);
+                        }}
+                        disabled={selectedDay?.status === "Posted"}
+                      />
+                    </>
+                  )}
+                </div>
+                <div className="theme-dropdown">
+                  <strong>Theme:</strong>{" "}
+                  <Select
+                    value={selectedTheme || undefined}
+                    onChange={(value) => setSelectedTheme(value)}
+                    style={{ width: 200 }}
+                    placeholder="Select theme"
+                    disabled={selectedDay?.status === "Posted"}
+                  >
+                    {themes.map((theme) => (
+                      <Select.Option key={theme} value={theme}>
+                        {theme}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </div>
               </div>
+
+              <Button
+                className="ai-generate-btn"
+                onClick={handleGeneratePost}
+                disabled={
+                  !selectedDay?.topicIdea ||
+                  !selectedTheme ||
+                  selectedDay?.status === "Posted"
+                }
+                loading={isGenerating}
+              >
+                <Sparkles size={16} style={{ marginRight: "8px" }} />
+                Generate with AI
+              </Button>
             </div>
 
-            <Button
-              className="ai-generate-btn"
-              onClick={handleGeneratePost}
-              disabled={
-                !selectedDay?.topicIdea ||
-                !selectedTheme ||
-                selectedDay?.status === "Posted"
-              }
-              loading={isGenerating}
+            <Input.TextArea
+              rows={20}
+              value={updatedPostContent}
+              onChange={handlePostContentChange}
+              placeholder="Write your post here..."
+              disabled={selectedDay?.status === "Posted"}
+            />
+            <div
+              className="drawer-actions"
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+              }}
             >
-              <Sparkles size={16} style={{ marginRight: "8px" }} />
-              Generate with AI
-            </Button>
-          </div>
-
-          <Input.TextArea
-            rows={20}
-            value={updatedPostContent}
-            onChange={handlePostContentChange}
-            placeholder="Write your post here..."
-            disabled={selectedDay?.status === "Posted"}
-          />
-          <div
-            className="drawer-actions"
-            style={{
-              marginTop: "1rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: "8px",
-            }}
-          >
-            {/* <Button type="primary" onClick={handleGeneratePost}>
+              {/* <Button type="primary" onClick={handleGeneratePost}>
               Generate Post
             </Button> */}
-            <Button
-              type="default"
-              onClick={handleSchedulePost}
-              loading={isScheduling}
-              disabled={selectedDay?.status === "Posted"}
-            >
-              {selectedDay?.status === "Posted"
-                ? "Post Published"
-                : selectedDay?.status === "Scheduled"
-                ? "Update Post"
-                : "Schedule Post"}
-            </Button>
-            <Button
-              type="dashed"
-              danger
-              onClick={handleCancelPost}
-              disabled={selectedDay?.status === "Posted"}
-            >
-              Cancel Post
-            </Button>
-            <Button
-              type="dashed"
-              danger
-              onClick={handleDeletePost}
-              disabled={selectedDay?.status === "Posted"}
-            >
-              Delete Post
-            </Button>
+              <Button
+                type="default"
+                onClick={handleSchedulePost}
+                loading={isScheduling}
+                disabled={selectedDay?.status === "Posted"}
+              >
+                {selectedDay?.status === "Posted"
+                  ? "Post Published"
+                  : selectedDay?.status === "Scheduled"
+                  ? "Update Post"
+                  : "Schedule Post"}
+              </Button>
+              <Button
+                type="dashed"
+                danger
+                onClick={handleCancelPost}
+                disabled={selectedDay?.status === "Posted"}
+              >
+                Cancel Post
+              </Button>
+              <Button
+                type="dashed"
+                danger
+                onClick={handleDeletePost}
+                disabled={selectedDay?.status === "Posted"}
+              >
+                Delete Post
+              </Button>
+            </div>
           </div>
-        </div>
-      </Drawer>
+        </Drawer>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,113 @@
+.signin-graphic-section {
+  flex: 1;
+  background-color: rgb(27, 77, 234);
+  max-width: 35%;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 30px;
+  overflow: hidden;
+}
+
+.signin-graphic-section h2 {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  margin-top: 120px;
+  margin-bottom: 50px;
+  z-index: 1;
+  position: relative;
+}
+
+.icon-field {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 40px;
+}
+
+.icon-box {
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  color: white;
+}
+
+.box-blue {
+  background-color: #00cfff;
+  box-shadow: 0 1px 6px #00cfff;
+}
+
+.box-yellow {
+  background-color: #fff59d;
+  color: #f59f0bbc;
+  box-shadow: 0 1px 6px #fff59d;
+}
+
+.box-pink {
+  background-color: #ff6fa8;
+  box-shadow: 0 1px 6px #ff6fa8;
+}
+
+/* Position icons randomly */
+.icon1 {
+  top: 35px;
+  left: 27%;
+  height: 75px;
+  width: 75px;
+}
+
+.icon2 {
+  top: 0px;
+  left: 58%;
+  height: 90px;
+  width: 90px;
+}
+
+.icon3 {
+  top: 140px;
+  left: 50%;
+  height: 60px;
+  width: 60px;
+}
+
+.wobble {
+  animation: wobble 2s infinite ease-in-out;
+}
+
+@keyframes wobble {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+}
+
+.signup-testimonial {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 16px;
+  color: rgb(206, 223, 254);
+  font-size: 12px;
+  max-width: 70%;
+  margin: 0 auto;
+  z-index: 1;
+  position: relative;
+}
+.signup-testimonial strong {
+  color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+  .signin-graphic-section {
+    display: none;
+  }
+}

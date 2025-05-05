@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Onboarding.css";
+import { Sparkles } from "lucide-react";
+
+import SignInGraphicSection from "./GraphicsSection";
 
 import axios from "axios";
 
@@ -161,19 +164,13 @@ export default function Onboarding() {
                 editableAnswers.valueProp.length < MIN_CHARS
               }
             >
+              <Sparkles size={16} style={{ marginRight: "8px" }} />
               Generate Content Calender
             </button>
           </div>
         </div>
       </div>
-      <div className="graphic-section">
-        <h2>Grow your Linkedin presence with ease!</h2>
-        <img
-          src="/images/like3.png" // Replace with your own vector image or animation
-          alt="Email Graphic"
-          className="illustration"
-        />
-      </div>
+      <SignInGraphicSection />
       {isLoading && (
         <div className="loading-overlay">
           <div className="fancy-loader">

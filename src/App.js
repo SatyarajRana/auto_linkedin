@@ -64,7 +64,6 @@ function App() {
           element={<div>Payment was successfully completed!!!</div>}
         />
         <Route path="/cancel" element={<div>Payment was cancelled!!!</div>} />
-        {/* <Route path="/calender" element={<Calender />} /> */}
       </Routes>
     </Router>
   );

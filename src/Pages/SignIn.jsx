@@ -2,6 +2,12 @@ import "./SignIn.css";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { FiArrowRight } from "react-icons/fi";
+import { motion } from "framer-motion";
+
+import { Linkedin } from "lucide-react";
+
+import SignInGraphicSection from "./GraphicsSection";
 
 const CLIENT_ID = "77szn4r1ff9i3g";
 
@@ -86,6 +92,48 @@ export default function HomePage() {
     window.location.href = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=profile%20w_member_social%20openid`;
   };
 
+  const Particle = ({ left, top, size, delay }) => {
+    return (
+      <motion.span
+        initial={{ opacity: 0, y: 0 }}
+        animate={{
+          y: [0, -10, 0],
+          opacity: [0.2, 1, 0.2],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 3,
+          ease: "easeInOut",
+          delay,
+        }}
+        style={{
+          position: "absolute",
+          left: `${left}%`,
+          top: `${top}%`,
+          width: `${size}px`,
+          height: `${size}px`,
+          backgroundColor: "white",
+          borderRadius: "50%",
+          opacity: 0.5,
+          pointerEvents: "none",
+        }}
+      />
+    );
+  };
+
+  const generateParticles = (count = 30) => {
+    return Array.from({ length: count }).map((_, i) => {
+      const left = Math.random() * 100;
+      const top = Math.random() * 100;
+      const size = Math.random() * 4 + 2;
+      const delay = Math.random() * 5;
+
+      return (
+        <Particle key={i} left={left} top={top} size={size} delay={delay} />
+      );
+    });
+  };
+
   return (
     <div className="signup-container">
       <div className="form-section">
@@ -94,29 +142,28 @@ export default function HomePage() {
           <div className="arrow-container">
             <img src="/images/arrow.png" alt="" className="arrow-image" />
           </div>
-          <div className="form-content">
-            <div className="form-header">
-              <p className="signup-subtitle">
+          <div className="signin-form-content">
+            <div className="signin-form-header">
+              <div className="signup-subtitle">
                 {" "}
-                <h1>Welcome to Zilla</h1>Simplify the process of creating and
-                posting engaging content on LinkedIn
-              </p>
+                <h1>
+                  Welcome to{" "}
+                  <span className="signup-subtitle-zilla">Zilla</span>
+                </h1>
+                Simplify the process of creating and posting engaging content on
+                LinkedIn
+              </div>
               <button className="signup-button" onClick={handleLinkedInLogin}>
-                Sign in with Linkedin
+                <Linkedin size={20} className="signup-icon" />
+                <span>Sign in with LinkedIn </span>
+                <FiArrowRight className="signup-arrow" />
               </button>
+              <div className="signup-footer-text">Trusted by professionals</div>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="graphic-section">
-        <h2>Grow your Linkedin presence with ease!</h2>
-        <img
-          src="/images/like3.png"
-          alt="Email Graphic"
-          className="illustration"
-        />
-      </div>
+      <SignInGraphicSection />
     </div>
   );
 }
