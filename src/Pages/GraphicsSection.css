@@ -1,4 +1,7 @@
 .signin-graphic-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5%;
   flex: 1;
   background-color: rgb(27, 77, 234);
   max-width: 35%;
@@ -8,6 +11,7 @@
   text-align: center;
   padding: 30px;
   overflow: hidden;
+  /* gap: 20px; */
 }
 
 .signin-graphic-section h2 {
