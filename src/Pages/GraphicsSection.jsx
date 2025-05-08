@@ -58,7 +58,7 @@ export default function SignInGraphicSection() {
           <Heart />
         </div>
       </div>
-      {generateParticles(70)}
+      {generateParticles(100)}
 
       <div className="signup-testimonial">
         <p>
