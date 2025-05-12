@@ -148,19 +148,19 @@
 }
 
 .post-content-wrapper {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
+  max-height: 80px; /* enough to show 1–2 lines of text */
   transition: all 0.4s ease;
-  transform: scaleY(0.95);
+  overflow: hidden;
+  opacity: 1;
   transform-origin: top;
-  will-change: transform, opacity;
+  /* will-change: transform, opacity; */
 }
 
 .post-content-wrapper.expanded {
   max-height: 500px; /* or a size that fits your layout */
   opacity: 1;
   transform: scaleY(1);
+  transition: all 0.4s ease;
   overflow-y: auto; /* <-- allows vertical scrolling */
   padding-right: 6px; /* optional: space for scrollbar */
 }
@@ -182,8 +182,6 @@
   padding: 16px 18px;
   margin-top: -8px;
   margin-bottom: 10px;
-  border-radius: 10px;
-  border: 1px solid #e0e0e0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   white-space: pre-line;
   word-break: break-word;

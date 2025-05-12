@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import Navbar from "./Navbar";
 
-import { Drawer, Button, Input, Select } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -22,13 +21,6 @@ if (env === "production") {
   // Development URL
   BASE_URL = process.env.REACT_APP_DEVELOPMENT_URL;
 }
-
-const themes = [
-  "Current Trends",
-  "Client Questions",
-  "Problems you Solved",
-  "Your Skills",
-];
 
 const posts = [
   {
@@ -247,7 +239,15 @@ const Posts = () => {
                   expandedIndex === index ? "expanded" : ""
                 }`}
               >
-                <div className="post-content">{post.content}</div>
+                <div className="post-content">
+                  {expandedIndex === index
+                    ? post.content || ""
+                    : post.content
+                    ? `${post.content.slice(0, 60)}${
+                        post.content.length > 60 ? "..." : ""
+                      }`
+                    : ""}
+                </div>
               </div>
 
               <div className="post-footer">
